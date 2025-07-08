@@ -57,7 +57,7 @@
             opacity: 0.9;
             margin-bottom: 5px;
         }
-        /* User ID display element only */
+        /* User ID and Email display elements */
         .user-info {
             font-size: 0.75rem; /* text-xs */
             opacity: 0.8;
@@ -216,8 +216,9 @@
         <div id="balance-card">
             <div class="balance-label">လက်ရှိလက်ကျန်ငွေ</div>
             <div id="total-balance" class="font-extrabold">၀.၀၀</div>
-            <!-- User ID display element only -->
+            <!-- User ID and Email display element -->
             <div class="user-info">
+                <span id="user-email-display" class="block">Email: N/A</span>
                 <span id="user-id-display" class="block">User ID: N/A</span>
             </div>
         </div>
@@ -331,6 +332,21 @@
 
         <div id="categories-screen" class="screen">
             <h2 class="text-xl font-semibold mb-4 text-gray-800">အမျိုးအစားများ စီမံခန့်ခွဲရန်</h2>
+            <div class="mb-4 p-4 bg-gray-50 rounded-xl shadow-sm">
+                <h3 class="text-lg font-medium text-gray-800 mb-2">အသုံးပြုသူ အခြေအနေ</h3>
+                <div id="auth-status" class="mb-4 text-sm">
+                    <!-- Authentication status will be displayed here -->
+                </div>
+                <button id="google-sign-in-btn" class="w-full py-2 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 transition duration-300 flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.24 10.285V14.4h6.806c-.275 1.379-1.834 4.217-6.806 4.217-4.102 0-7.437-3.335-7.437-7.437s3.335-7.437 7.437-7.437c2.27 0 3.766.977 4.604 1.77l3.056-3.055C19.451 2.923 16.29 1.5 12.24 1.5 6.452 1.5 1.5 6.452 1.5 12.24s4.952 10.74 10.74 10.74c5.992 0 10.32-4.102 10.32-10.437 0-.718-.061-1.379-.172-2.02z" />
+                    </svg>
+                    <span>Google ဖြင့် ဝင်မည်</span>
+                </button>
+                <button id="sign-out-btn" class="w-full py-2 mt-2 bg-red-600 text-white font-semibold rounded-xl shadow-md hover:bg-red-700 transition duration-300 hidden">
+                    ထွက်မည်
+                </button>
+            </div>
             <div class="mb-4 flex items-center space-x-2">
                 <input type="text" id="new-category-input" placeholder="အမျိုးအစားအသစ် ထည့်ပါ" class="flex-grow p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                 <button id="add-category-btn" class="p-3 bg-indigo-600 text-white rounded-xl shadow-md hover:bg-indigo-700 transition duration-300">
@@ -394,7 +410,7 @@
     <script type="module">
         // Firebase Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, setDoc, getDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Your provided Firebase configuration - now hardcoded
@@ -417,6 +433,7 @@
         let db;
         let auth;
         let currentUserId = null; // Stores the authenticated user's ID
+        let currentUserEmail = null; // To store user email (from Google profile)
         let isAuthReady = false; // Flag to ensure Firestore operations only happen after authentication
 
         // Data storage (now populated by Firestore listeners)
@@ -447,8 +464,14 @@
         const addCategoryBtn = document.getElementById('add-category-btn');
         const categoryListEl = document.getElementById('category-list');
 
-        // User ID display element only
+        // User ID and Email display elements
         const userIdDisplayEl = document.getElementById('user-id-display');
+        const userEmailDisplayEl = document.getElementById('user-email-display'); // New element for email
+
+        // New DOM elements for Google Sign-In
+        const googleSignInBtn = document.getElementById('google-sign-in-btn');
+        const signOutBtn = document.getElementById('sign-out-btn');
+        const authStatusDiv = document.getElementById('auth-status'); // Div to show auth status
 
         // Elements for type selection buttons
         const expenseTypeBtn = document.getElementById('expense-type-btn');
@@ -526,39 +549,86 @@
             return `${day} ${month} ${year}`;
         }
 
-        // Display user ID
+        // Display user ID and Email
         window.displayUserId = function() {
-            if (userIdDisplayEl && currentUserId) {
-                userIdDisplayEl.textContent = `User ID: ${currentUserId}`;
-            } else if (userIdDisplayEl) {
-                userIdDisplayEl.textContent = 'User ID: N/A (Authentication Pending)';
+            if (userEmailDisplayEl) {
+                userEmailDisplayEl.textContent = `Email: ${currentUserEmail || 'N/A'}`;
+            }
+            if (userIdDisplayEl) {
+                userIdDisplayEl.textContent = `User ID: ${currentUserId || 'N/A (Authentication Pending)'}`;
+            }
+
+            // Update auth status section on categories screen
+            if (authStatusDiv) {
+                if (currentUserId) {
+                    authStatusDiv.innerHTML = `
+                        <p class="text-gray-700">လက်ရှိအသုံးပြုသူ:</p>
+                        <p class="font-semibold text-gray-800 break-all">${currentUserEmail || 'အမည်မသိ'}</p>
+                        <p class="text-xs text-gray-500 break-all">UID: ${currentUserId}</p>
+                    `;
+                    googleSignInBtn.classList.add('hidden');
+                    signOutBtn.classList.remove('hidden');
+                } else {
+                    authStatusDiv.innerHTML = `<p class="text-gray-500">ဝင်ရောက်ထားခြင်း မရှိသေးပါ</p>`;
+                    googleSignInBtn.classList.remove('hidden');
+                    signOutBtn.classList.add('hidden');
+                }
             }
         };
 
         // --- Firebase Initialization and Authentication ---
 
         // Initialize Firebase app and services using the provided firebaseConfig
-        // This ensures the app connects to the correct Firebase project.
         app = initializeApp(firebaseConfig);
         db = getFirestore(app);
         auth = getAuth(app);
 
-        // Listen for authentication state changes
+        // Authentication state listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
+                currentUserEmail = user.email; // Get email from Google profile
                 isAuthReady = true;
                 // Set up Firestore listeners only after authentication is ready
                 setupFirestoreListeners();
-                displayUserId(); // Update UI with user ID
+                displayUserId(); // Update UI with user ID and email
             } else {
-                // If no user is signed in, sign in anonymously to your Firebase project
+                currentUserId = null;
+                currentUserEmail = null;
+                isAuthReady = false;
+                // If no user is signed in, try to sign in anonymously to ensure data persistence
+                // This will create a new anonymous user in *your* Firebase project
                 try {
-                    await signInAnonymously(auth); 
+                    await signInAnonymously(auth);
                 } catch (error) {
                     console.error("Error signing in anonymously:", error);
-                    showCustomModal("Authentication Error", `Failed to sign in anonymously: ${error.message}`, () => {}, null);
+                    showCustomModal("Authentication Error", `အမည်မသိ ဝင်ရောက်၍ မရပါ: ${error.message}`, () => {}, null);
                 }
+                displayUserId(); // Update UI to show "N/A" and login button
+            }
+        });
+
+        // Google Sign-In
+        googleSignInBtn.addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
+            try {
+                await signInWithPopup(auth, provider);
+                // onAuthStateChanged will handle updating UI and listeners
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+                showCustomModal("ဝင်ရောက်မှုအမှား", `Google ဖြင့် ဝင်ရောက်၍ မရပါ။: ${error.message}`, () => {}, null);
+            }
+        });
+
+        // Sign Out
+        signOutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // onAuthStateChanged will handle resetting UI and listeners
+                showCustomModal("ထွက်ခွာပြီးပါပြီ", "အောင်မြင်စွာ ထွက်ခွာပြီးပါပြီ။", () => {}, null);
+            } catch (error) {
+                console.error("Sign Out Error:", error);
+                showCustomModal("ထွက်ခွာမှုအမှား", `ထွက်ခွာ၍ မရပါ။: ${error.message}`, () => {}, null);
             }
         });
 
@@ -653,6 +723,7 @@
                 updateReports();
             } else if (screenId === 'categories-screen') {
                 renderCategoryList();
+                displayUserId(); // Update auth status on categories screen
             }
         }
 
