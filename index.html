@@ -57,7 +57,7 @@
             opacity: 0.9;
             margin-bottom: 5px;
         }
-        /* User ID and Nickname display elements (Nickname display removed) */
+        /* User ID display element only */
         .user-info {
             font-size: 0.75rem; /* text-xs */
             opacity: 0.8;
@@ -337,7 +337,6 @@
                     ထည့်မည်
                 </button>
             </div>
-            <!-- Nickname input and save button removed -->
             <div id="category-list" class="space-y-2 flex-grow">
                 <!-- Categories will be loaded here -->
             </div>
@@ -398,16 +397,26 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, setDoc, getDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global variables provided by the Canvas environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // Your provided Firebase configuration - now hardcoded
+        const firebaseConfig = {
+            apiKey: "AIzaSyDUf0QF4GqMb6s9ODTUiX7aTHRTR0YUqcE",
+            authDomain: "html-3ce83.firebaseapp.com",
+            databaseURL: "https://html-3ce83-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "html-3ce83",
+            storageBucket: "html-3ce83.firebasestorage.app",
+            messagingSenderId: "602585837585",
+            appId: "1:602585837585:web:415bd8bcc59b4cbd4d81b0",
+            measurementId: "G-QBME7CRR2X"
+        };
+
+        // Using appId directly from the provided firebaseConfig
+        const appId = firebaseConfig.appId;
 
         // Firebase instances
         let app;
         let db;
         let auth;
         let currentUserId = null; // Stores the authenticated user's ID
-        // userNickname and related logic removed
         let isAuthReady = false; // Flag to ensure Firestore operations only happen after authentication
 
         // Data storage (now populated by Firestore listeners)
@@ -438,9 +447,8 @@
         const addCategoryBtn = document.getElementById('add-category-btn');
         const categoryListEl = document.getElementById('category-list');
 
-        // User ID display element only (Nickname display elements removed)
+        // User ID display element only
         const userIdDisplayEl = document.getElementById('user-id-display');
-        // nicknameInput and saveNicknameBtn removed
 
         // Elements for type selection buttons
         const expenseTypeBtn = document.getElementById('expense-type-btn');
@@ -490,7 +498,7 @@
             return amount.toLocaleString();
         }
 
-        // Get current date in MyHomePage-MM-DD format
+        // Get current date in YYYY-MM-DD format
         function getCurrentDate() {
             const today = new Date();
             const year = today.getFullYear();
@@ -518,7 +526,7 @@
             return `${day} ${month} ${year}`;
         }
 
-        // Display user ID (nickname display removed)
+        // Display user ID
         window.displayUserId = function() {
             if (userIdDisplayEl && currentUserId) {
                 userIdDisplayEl.textContent = `User ID: ${currentUserId}`;
@@ -529,38 +537,30 @@
 
         // --- Firebase Initialization and Authentication ---
 
-        // Initialize Firebase app and services
-        if (Object.keys(firebaseConfig).length > 0) {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
+        // Initialize Firebase app and services using the provided firebaseConfig
+        // This ensures the app connects to the correct Firebase project.
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
 
-            // Listen for authentication state changes
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    currentUserId = user.uid;
-                    isAuthReady = true;
-                    // Set up Firestore listeners only after authentication is ready
-                    setupFirestoreListeners();
-                    displayUserId(); // Update UI with user ID
-                } else {
-                    // Sign in anonymously if no user or custom token is provided
-                    try {
-                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                            await signInWithCustomToken(auth, __initial_auth_token);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (error) {
-                        console.error("Error signing in:", error);
-                        showCustomModal("Authentication Error", `Failed to sign in: ${error.message}`, () => {}, null);
-                    }
+        // Listen for authentication state changes
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                isAuthReady = true;
+                // Set up Firestore listeners only after authentication is ready
+                setupFirestoreListeners();
+                displayUserId(); // Update UI with user ID
+            } else {
+                // If no user is signed in, sign in anonymously to your Firebase project
+                try {
+                    await signInAnonymously(auth); 
+                } catch (error) {
+                    console.error("Error signing in anonymously:", error);
+                    showCustomModal("Authentication Error", `Failed to sign in anonymously: ${error.message}`, () => {}, null);
                 }
-            });
-        } else {
-            console.error("Firebase config is missing. Firebase features will not be available.");
-            showCustomModal("Configuration Error", "Firebase configuration is missing. Please ensure the environment provides '__firebase_config'.", () => {}, null);
-        }
+            }
+        });
 
         // --- Firestore Data Listeners ---
 
@@ -571,7 +571,7 @@
                 return;
             }
 
-            // Reverting to secure, user-specific paths (NOT nickname based)
+            // Using secure, user-specific paths (UID based)
             const transactionsColRef = collection(db, `artifacts/${appId}/users/${currentUserId}/transactions`);
             const qTransactions = query(transactionsColRef, orderBy('timestamp', 'desc')); 
 
@@ -588,7 +588,7 @@
                 showCustomModal("Data Error", `Error loading transactions: ${error.message}`, () => {}, null);
             });
 
-            // Reverting to secure, user-specific paths (NOT nickname based)
+            // Using secure, user-specific paths (UID based)
             const categoriesColRef = collection(db, `artifacts/${appId}/users/${currentUserId}/categories`);
             const qCategories = query(categoriesColRef, orderBy('name')); 
 
@@ -601,8 +601,6 @@
                 showCustomModal("Data Error", `Error loading categories: ${error.message}`, () => {}, null);
             });
         };
-
-        // fetchUserNickname and saveNicknameBtn logic removed (no more nickname management)
 
         // --- UI Management ---
 
@@ -655,7 +653,6 @@
                 updateReports();
             } else if (screenId === 'categories-screen') {
                 renderCategoryList();
-                // Nickname input is removed, no need to set its value
             }
         }
 
@@ -701,7 +698,7 @@
         transactionForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            if (!db || !currentUserId) { // Removed userNickname check
+            if (!db || !currentUserId) {
                 showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
                 return;
             }
@@ -735,7 +732,6 @@
             };
             
             try {
-                // Reverting to UID path
                 await addDoc(collection(db, `artifacts/${appId}/users/${currentUserId}/transactions`), newTransactionData);
                 transactionForm.reset(); // Clear form fields
                 selectedCategoryForForm = ''; // Clear selected category for next transaction
@@ -863,12 +859,11 @@
 
         // Delete a transaction from Firestore
         async function deleteTransaction(id) {
-            if (!db || !currentUserId) { // Removed userNickname check
+            if (!db || !currentUserId) {
                 showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
                 return;
             }
             try {
-                // Reverting to UID path
                 await deleteDoc(doc(db, `artifacts/${appId}/users/${currentUserId}/transactions`, id));
                 // onSnapshot listener will automatically update the UI
             } catch (error) {
@@ -1098,7 +1093,7 @@
 
         // Add a new category to Firestore
         addCategoryBtn.addEventListener('click', async () => {
-            if (!db || !currentUserId) { // Removed userNickname check
+            if (!db || !currentUserId) {
                 showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
                 return;
             }
@@ -1110,7 +1105,6 @@
                     return;
                 }
                 try {
-                    // Reverting to UID path
                     await addDoc(collection(db, `artifacts/${appId}/users/${currentUserId}/categories`), { name: newCat });
                     newCategoryInput.value = ''; // Clear input field
                     // onSnapshot listener will automatically update the UI
@@ -1123,11 +1117,10 @@
 
         // Delete a category from Firestore
         async function deleteCategory(catToDelete) {
-            if (!db || !currentUserId) { // Removed userNickname check
+            if (!db || !currentUserId) {
                 showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
                 return;
             }
-            // Reverting to UID path
             const categoriesColRef = collection(db, `artifacts/${appId}/users/${currentUserId}/categories`);
             const q = query(categoriesColRef, where('name', '==', catToDelete));
             try {
