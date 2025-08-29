@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>စရိတ်စာရင်း - အုပ်စုဗားရှင်း</title>
+    <title>MMHအိမ်သုံးစရိတ်</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -19,13 +19,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: px;
             box-sizing: border-box;
         }
         #app-container {
             background-color: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-radius: px;
+            box-shadow: 0 20px60px rgba(0, 0, 0, 0.15);
             width: 100%;
             max-width: 420px;
             height: 100%;
@@ -38,8 +38,8 @@
         .main-header {
             background: linear-gradient(135deg, #4a90e2, #50e3c2); /* Blue to teal gradient */
             color: white;
-            padding: 40px 24px 80px;
-            border-bottom-left-radius: 30px;
+            padding: 40px 24px;
+            border-bottom-left-radius: 300px;
             border-bottom-right-radius: 30px;
             position: relative;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -48,20 +48,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
         .balance-card-container {
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
+            width: 100%;
         }
         #balance-card {
             background-color: #ffffff;
-            border-radius: 24px;
+            border-radius: 4px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 24px;
+            padding: 4px;
             text-align: center;
         }
         #total-balance {
@@ -74,7 +70,6 @@
             display: none;
             flex-grow: 1;
             padding: 24px;
-            padding-top: 80px;
             padding-bottom: 120px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -184,17 +179,17 @@
             <div class="balance-card-container">
                 <div id="balance-card">
                     <div class="text-center text-sm opacity-90 mb-1 text-gray-500">လက်ကျန်ငွေ</div>
-                    <div id="total-balance" class="font-extrabold text-gray-900 text-4xl">၀.၀၀ ကျပ်</div>
+                    <div id="total-balance" class="font-extrabold text-gray-900 text-4xl">၀.၀၀ </div>
                 </div>
             </div>
         </div>
 
         <div id="loading-overlay" class="absolute inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center rounded-2xl z-20">
             <div class="spinner"></div>
-            <p id="loading-text" class="mt-4 text-gray-600 font-medium">ဒေတာများ ဆွဲယူနေပါသည်...</p>
+            <p id="loading-text" class="mt-4 text-gray-600 font-medium">Loading...</p>
         </div>
 
-        <div id="dashboard-screen" class="screen">
+        <div id="dashboard-screen" class="screen active">
             <h2 class="text-xl font-semibold mb-4 text-gray-800 mt-12">မကြာသေးမီက မှတ်တမ်းများ</h2>
             <div id="recent-transactions" class="space-y-4 flex-grow">
                 <p class="text-gray-500 text-center mt-8">မှတ်တမ်းများ မရှိသေးပါ</p>
@@ -213,7 +208,7 @@
                     </select>
                 </div>
                 <div>
-                    <label for="transaction-amount" class="block text-sm font-medium text-gray-700 mb-1">ပမာဏ (ကျပ်)</label>
+                    <label for="transaction-amount" class="block text-sm font-medium text-gray-700 mb-1">ပမာဏ ()</label>
                     <input type="number" id="transaction-amount" placeholder="ဥပမာ: ၅၀၀၀" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm" required>
                 </div>
                 <div>
@@ -334,7 +329,7 @@
             <p id="modal-message" class="text-gray-700 mb-6"></p>
             <div class="flex justify-end space-x-3">
                 <button id="modal-cancel-btn" class="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition duration-300">မလုပ်တော့ပါ</button>
-                <button id="modal-confirm-btn" class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300">ဖျက်မည်</button>
+                <button id="modal-confirm-btn" class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300">Delete</button>
             </div>
         </div>
     </div>
@@ -421,7 +416,7 @@
         let auth = null;
         let userId = null;
         let groupId = null;
-        let username = 'ဧည့်သည်';
+        let username = 'Name';
         let transactions = [];
         let categories = [];
         let confirmActionCallback = null;
@@ -431,7 +426,7 @@
 
         // --- Utility Functions ---
         function formatCurrency(amount) {
-            return `${amount.toLocaleString()} ကျပ်`;
+            return `${amount.toLocaleString()} `;
         }
 
         function getCurrentDate() {
@@ -943,7 +938,7 @@
 
         async function clearAllDataAndResetUser() {
             showCustomModal(
-                'အချက်အလက်အားလုံးကို ဖျက်မည်လား',
+                'All Delete',
                 'သင်၏အုပ်စုနှင့်ပတ်သက်သော မှတ်တမ်းများ၊ အမျိုးအစားများအားလုံး လုံးဝဖျက်ပစ်မည်။ ဤလုပ်ဆောင်ချက်ကို ပြန်လည်ပြင်၍မရပါ။',
                 async () => {
                     try {
@@ -965,7 +960,7 @@
                         await deleteDoc(groupDocRef);
 
                         groupId = null;
-                        username = 'ဧည့်သည်';
+                        username = 'Name';
                         localStorage.removeItem('groupId');
                         userNameDisplay.textContent = username;
                         userIdDisplay.textContent = 'အုပ်စု ID: ...';
