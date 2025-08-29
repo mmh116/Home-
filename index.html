@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>စရိတ်စာရင်း - အုပ်စုဗားရှင်း</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
@@ -14,8 +14,8 @@
             overflow: hidden;
         }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            font-family: 'Poppins', sans-serif;
+            background-color: #e0f7fa; /* Light cyan background */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,7 +25,7 @@
         #app-container {
             background-color: #ffffff;
             border-radius: 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             width: 100%;
             max-width: 420px;
             height: 100%;
@@ -36,44 +36,45 @@
             position: relative;
         }
         .main-header {
-            background: linear-gradient(135deg, #1f2937, #4b5563);
+            background: linear-gradient(135deg, #4a90e2, #50e3c2); /* Blue to teal gradient */
             color: white;
-            padding: 30px 24px 80px;
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
+            padding: 40px 24px 80px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
             position: relative;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         .user-info {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .balance-card-container {
             position: absolute;
-            bottom: -40px;
+            bottom: -50px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
         }
         #balance-card {
             background-color: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 24px;
             text-align: center;
         }
         #total-balance {
-            font-size: 2.25rem;
+            font-size: 2.5rem;
             font-weight: 700;
             margin-top: 5px;
+            letter-spacing: -1px;
         }
         .screen {
             display: none;
             flex-grow: 1;
             padding: 24px;
-            padding-top: 60px;
+            padding-top: 80px;
             padding-bottom: 120px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
@@ -95,55 +96,47 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 12px 0;
-            color: #9ca3af;
-            font-size: 0.75rem;
+            padding: 16px 0;
+            color: #b0bec5; /* Light grey for inactive */
+            font-size: 0.8rem;
             font-weight: 500;
-            transition: color 0.2s ease-in-out;
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+            border-radius: 16px;
         }
         .nav-button.active {
-            color: #1f2937;
+            color: #4a90e2; /* Active color */
+            background-color: #f0f4f7;
+            transform: translateY(-5px);
         }
         .nav-button svg {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             margin-bottom: 4px;
         }
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            background: transparent;
-            bottom: 0;
-            color: transparent;
-            cursor: pointer;
-            height: auto;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: auto;
+        input, select, textarea {
+            border: 1px solid #e0e0e0;
+            background-color: #f7f9fc;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        input[type="date"] {
-            position: relative;
+        input:focus, select:focus, textarea:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
         }
-        .screen::-webkit-scrollbar {
-            width: 8px;
+        .transaction-item, .category-item {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
         }
-        .screen::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        .screen::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-        .screen::-webkit-scrollbar-thumb:hover {
-            background: #555;
+        .transaction-item:hover, .category-item:hover {
+            transform: translateY(-2px);
         }
         .bottom-space-indicator {
             height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6b7280;
+            color: #90a4ae;
             font-size: 0.8rem;
             margin-top: 20px;
         }
@@ -151,7 +144,7 @@
             transition: opacity 0.5s ease-in-out;
         }
         #transaction-form button[type="submit"]:disabled {
-            background-color: #9ca3af;
+            background-color: #b0bec5;
             cursor: not-allowed;
         }
         /* Loading Spinner */
@@ -160,7 +153,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            border-left-color: #4f46e5;
+            border-left-color: #4a90e2; /* Spinner color */
             animation: spin 1s linear infinite;
         }
 
@@ -179,32 +172,31 @@
         <div class="main-header">
             <div class="user-info">
                 <div>
-                    <div id="user-name-display" class="text-xl font-bold">ဧည့်သည်</div>
-                    <div id="user-id-display" class="text-xs text-white opacity-70 mt-1">အုပ်စု ID: ...</div>
+                    <div id="user-name-display" class="text-2xl font-bold">ဧည့်သည်</div>
+                    <div id="user-id-display" class="text-xs text-white opacity-80 mt-1">အုပ်စု ID: ...</div>
                 </div>
-                <button id="edit-user-btn" class="flex items-center space-x-2 p-2 bg-white bg-opacity-20 text-white rounded-full shadow-md hover:bg-opacity-30 transition duration-300">
+                <button id="edit-user-btn" class="flex items-center space-x-2 p-2 bg-white bg-opacity-30 text-white rounded-full shadow-md hover:bg-opacity-40 transition duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 19.5a.75.75 0 01.75-.75h14.5a.75.75 0 01.75.75v1.25a.75.75 0 01-.75.75H5.251a.75.75 0 01-.75-.75v-1.25z" />
                     </svg>
-                    <span class="text-sm font-medium">အမည်ပြောင်း/အုပ်စုဝင်မည်</span>
                 </button>
             </div>
             <div class="balance-card-container">
                 <div id="balance-card">
-                    <div class="text-center text-sm opacity-90 mb-1 text-gray-700">လက်ကျန်ငွေ</div>
-                    <div id="total-balance" class="font-extrabold text-gray-800 text-3xl">၀.၀၀ ကျပ်</div>
+                    <div class="text-center text-sm opacity-90 mb-1 text-gray-500">လက်ကျန်ငွေ</div>
+                    <div id="total-balance" class="font-extrabold text-gray-900 text-4xl">၀.၀၀ ကျပ်</div>
                 </div>
             </div>
         </div>
 
         <div id="loading-overlay" class="absolute inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center rounded-2xl z-20">
             <div class="spinner"></div>
-            <p id="loading-text" class="mt-4 text-gray-600">ဒေတာများ ဆွဲယူနေပါသည်...</p>
+            <p id="loading-text" class="mt-4 text-gray-600 font-medium">ဒေတာများ ဆွဲယူနေပါသည်...</p>
         </div>
 
         <div id="dashboard-screen" class="screen">
             <h2 class="text-xl font-semibold mb-4 text-gray-800 mt-12">မကြာသေးမီက မှတ်တမ်းများ</h2>
-            <div id="recent-transactions" class="space-y-3 flex-grow">
+            <div id="recent-transactions" class="space-y-4 flex-grow">
                 <p class="text-gray-500 text-center mt-8">မှတ်တမ်းများ မရှိသေးပါ</p>
             </div>
             <div class="bottom-space-indicator"></div>
@@ -215,21 +207,21 @@
             <form id="transaction-form" class="space-y-5">
                 <div>
                     <label for="transaction-type" class="block text-sm font-medium text-gray-700 mb-1">အမျိုးအစား</label>
-                    <select id="transaction-type" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm">
+                    <select id="transaction-type" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm">
                         <option value="expense">ထွက်ငွေ</option>
                         <option value="income">ဝင်ငွေ</option>
                     </select>
                 </div>
                 <div>
                     <label for="transaction-amount" class="block text-sm font-medium text-gray-700 mb-1">ပမာဏ (ကျပ်)</label>
-                    <input type="number" id="transaction-amount" placeholder="ဥပမာ: ၅၀၀၀" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm" required>
+                    <input type="number" id="transaction-amount" placeholder="ဥပမာ: ၅၀၀၀" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm" required>
                 </div>
                 <div>
                     <label for="transaction-category" class="block text-sm font-medium text-gray-700 mb-1">အမျိုးအစားခွဲ</label>
                     <div class="relative">
-                        <select id="transaction-category" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm appearance-none pr-10" required>
+                        <select id="transaction-category" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm appearance-none pr-10" required>
                         </select>
-                        <button type="button" id="add-category-btn-form" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600 hover:text-gray-800">
+                        <button type="button" id="add-category-btn-form" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600 hover:text-blue-600">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
@@ -238,13 +230,13 @@
                 </div>
                 <div>
                     <label for="transaction-date" class="block text-sm font-medium text-gray-700 mb-1">ရက်စွဲ</label>
-                    <input type="date" id="transaction-date" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm" required>
+                    <input type="date" id="transaction-date" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm" required>
                 </div>
                 <div>
                     <label for="transaction-description" class="block text-sm font-medium text-gray-700 mb-1">ဖော်ပြချက် (optional)</label>
-                    <textarea id="transaction-description" rows="2" placeholder="ဥပမာ: မနက်စာ ထမင်းကြော်" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm"></textarea>
+                    <textarea id="transaction-description" rows="2" placeholder="ဥပမာ: မနက်စာ ထမင်းကြော်" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm"></textarea>
                 </div>
-                <button type="submit" class="w-full py-3 bg-gray-600 text-white font-semibold rounded-xl shadow-lg hover:bg-gray-700 transition duration-300">
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-blue-500 to-teal-500 text-white font-semibold rounded-xl shadow-lg hover:from-blue-600 hover:to-teal-600 transition duration-300">
                     မှတ်တမ်းတင်မည်
                 </button>
             </form>
@@ -261,7 +253,7 @@
                     <option value="">အမျိုးအစား အားလုံး</option>
                 </select>
             </div>
-            <div id="all-transactions" class="space-y-3 flex-grow">
+            <div id="all-transactions" class="space-y-4 flex-grow">
                 <p class="text-gray-500 text-center mt-8">မှတ်တမ်းများ မရှိသေးပါ</p>
             </div>
             <div class="bottom-space-indicator"></div>
@@ -271,10 +263,10 @@
             <h2 class="text-xl font-semibold mb-4 text-gray-800">အစီရင်ခံစာများ</h2>
             <div class="mb-4">
                 <label for="report-month-select" class="block text-sm font-medium text-gray-700 mb-1">လ ရွေးချယ်ပါ</label>
-                <select id="report-month-select" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm">
+                <select id="report-month-select" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm">
                 </select>
             </div>
-            <div class="bg-gray-50 p-4 rounded-xl shadow-sm mb-4">
+            <div class="bg-blue-50 p-4 rounded-xl shadow-sm mb-4">
                 <h3 class="text-lg font-medium text-gray-800 mb-2">လစဉ် ခြုံငုံသုံးသပ်ချက်</h3>
                 <p class="text-gray-700 mb-1">ဝင်ငွေစုစုပေါင်း: <span id="report-total-income" class="font-semibold text-green-600">၀.၀၀ ကျပ်</span></p>
                 <p class="text-gray-700">ထွက်ငွေစုစုပေါင်း: <span id="report-total-expense" class="font-semibold text-red-600">၀.၀၀ ကျပ်</span></p>
@@ -291,12 +283,12 @@
         <div id="categories-screen" class="screen">
             <h2 class="text-xl font-semibold mb-4 text-gray-800">အမျိုးအစားများ စီမံခန့်ခွဲရန်</h2>
             <div class="mb-4 flex items-center space-x-2">
-                <input type="text" id="new-category-input" placeholder="အမျိုးအစားအသစ် ထည့်ပါ" class="flex-grow p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm">
-                <button id="add-category-btn" class="p-3 bg-gray-600 text-white rounded-xl shadow-md hover:bg-gray-700 transition duration-300">
+                <input type="text" id="new-category-input" placeholder="အမျိုးအစားအသစ် ထည့်ပါ" class="flex-grow p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm">
+                <button id="add-category-btn" class="p-3 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600 transition duration-300">
                     ထည့်မည်
                 </button>
             </div>
-            <div id="category-list" class="space-y-2 flex-grow">
+            <div id="category-list" class="space-y-3 flex-grow">
             </div>
             <div class="bottom-space-indicator"></div>
         </div>
@@ -337,7 +329,7 @@
     </div>
 
     <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm">
+        <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
             <h3 id="modal-title" class="text-xl font-semibold mb-4 text-gray-800"></h3>
             <p id="modal-message" class="text-gray-700 mb-6"></p>
             <div class="flex justify-end space-x-3">
@@ -348,14 +340,14 @@
     </div>
 
     <div id="username-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm">
+        <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm">
             <h3 class="text-xl font-semibold mb-4 text-gray-800">အမည်ပြောင်း/အုပ်စုဝင်မည်</h3>
             <p class="text-gray-700 mb-4">အုပ်စုအမည် (Nickname) ကို ထည့်သွင်းပါ။</p>
-            <input type="text" id="username-input" placeholder="အုပ်စုအမည်" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm mb-4">
+            <input type="text" id="username-input" placeholder="အုပ်စုအမည်" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-blue-400 focus:border-blue-400 shadow-sm mb-4">
             <div class="flex justify-end space-x-3">
                 <button id="cancel-username-btn" class="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition duration-300">ပယ်ဖျက်မည်</button>
                 <button id="clear-username-btn" class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300">အုပ်စုအားလုံးဖျက်မည်</button>
-                <button id="save-username-btn" class="px-5 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300">သိမ်းမည်</button>
+                <button id="save-username-btn" class="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">သိမ်းမည်</button>
             </div>
         </div>
     </div>
@@ -365,7 +357,7 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Configuration ကို ဒီနေရာမှာ ထည့်သွင်းပေးထားပါတယ်။
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCbXKrJ-4XlafXS9glgys9T5d9ZNSYjwWM",
             authDomain: "mmh-fe555.firebaseapp.com",
@@ -378,7 +370,7 @@
 
         const __app_id = "mmh-fe555";
         const __firebase_config = JSON.stringify(firebaseConfig);
-        const __initial_auth_token = ""; // Placeholder, as it will be provided by the environment
+        const __initial_auth_token = "";
 
         // Global variables for Firebase
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -523,7 +515,7 @@
 
             transactions.slice(0, 5).forEach(t => {
                 const transactionItem = document.createElement('div');
-                transactionItem.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100');
+                transactionItem.classList.add('transaction-item', 'flex', 'justify-between', 'items-center', 'p-4');
                 const amountClass = t.type === 'income' ? 'text-green-600' : 'text-red-600';
                 const sign = t.type === 'income' ? '+' : '-';
 
@@ -584,7 +576,7 @@
 
                 groupedTransactions[date].forEach(t => {
                     const transactionItem = document.createElement('div');
-                    transactionItem.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100');
+                    transactionItem.classList.add('transaction-item', 'flex', 'justify-between', 'items-center', 'p-4');
                     const amountClass = t.type === 'income' ? 'text-green-600' : 'text-red-600';
                     const sign = t.type === 'income' ? '+' : '-';
 
@@ -771,7 +763,7 @@
                 bar.innerHTML = `
                     <div class="text-xs text-gray-700 w-1/3 truncate">${category}</div>
                     <div class="flex-grow bg-gray-200 rounded-full h-2 mx-2 overflow-hidden">
-                        <div class="bg-gray-500 h-full rounded-full" style="width: ${percentage.toFixed(0)}%;"></div>
+                        <div class="bg-blue-500 h-full rounded-full" style="width: ${percentage.toFixed(0)}%;"></div>
                     </div>
                     <div class="text-xs font-medium text-gray-700 w-1/6 text-right">${percentage.toFixed(0)}%</div>
                 `;
@@ -790,7 +782,7 @@
 
             sortedCategories.forEach(([category, amount]) => {
                 const listItem = document.createElement('div');
-                listItem.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-3', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100');
+                listItem.classList.add('transaction-item', 'flex', 'justify-between', 'items-center', 'p-3');
                 listItem.innerHTML = `
                     <div class="font-medium text-gray-800">${category}</div>
                     <div class="font-semibold text-red-600">${formatCurrency(amount)}</div>
@@ -807,7 +799,7 @@
             }
             categories.forEach(cat => {
                 const categoryItem = document.createElement('div');
-                categoryItem.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100');
+                categoryItem.classList.add('category-item', 'flex', 'justify-between', 'items-center', 'p-4');
                 categoryItem.innerHTML = `
                     <span class="font-medium text-gray-800">${cat}</span>
                     <button data-category="${cat}" class="delete-category-btn text-red-500 hover:text-red-700 p-1 rounded-full">
