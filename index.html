@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>စရိတ်စာရင်း - အိမ်သုံးစရိတ် စီမံခန့်ခွဲမှု</title>
-    <!-- Tailwind CSS CDN -->
+    <title>စရိတ်စာရင်း - အုပ်စုဗားရှင်း</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         html, body {
-            height: 100%; /* Ensure html and body take full viewport height */
+            height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent body scrollbar, app-container will handle its own scroll */
+            overflow: hidden;
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f3f4f6;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,65 +24,70 @@
         }
         #app-container {
             background-color: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px; /* Typical mobile width */
-            height: 100%; /* Make app-container take full height of its parent (body) */
-            max-height: 800px; /* Cap max height for larger screens if needed */
+            max-width: 420px;
+            height: 100%;
+            max-height: 820px;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Crucial to clip content at rounded corners, esp. for fixed nav */
-            position: relative; /* Essential for positioning the fixed-nav-bar relative to this container */
+            overflow: hidden;
+            position: relative;
         }
-        /* Style for the new header/balance card */
-        #balance-card {
-            background-color: #4f46e5; /* Indigo-600 background for the header */
-            color: #ffffff; /* White text */
-            padding: 25px 20px; /* Adjusted padding */
-            border-radius: 20px 20px 0 0; /* Only top corners rounded */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-            text-align: center;
-            margin-bottom: 0; /* No margin at the bottom of the card */
+        .main-header {
+            background: linear-gradient(135deg, #1f2937, #4b5563);
+            color: white;
+            padding: 30px 24px 80px;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
-        #balance-card #total-balance {
-            font-size: 3rem; /* Larger font for balance */
-            font-weight: 800; /* Extra bold */
-            line-height: 1.2;
-            margin-top: 5px;
-        }
-        #balance-card .balance-label {
-            font-size: 0.875rem; /* text-sm */
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        /* User ID and Email display elements */
         .user-info {
-            font-size: 0.75rem; /* text-xs */
-            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .balance-card-container {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+        }
+        #balance-card {
+            background-color: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        #total-balance {
+            font-size: 2.25rem;
+            font-weight: 700;
             margin-top: 5px;
         }
-
         .screen {
-            display: none; /* Hide all screens by default */
-            flex-grow: 1; /* Allows screen content to take available vertical space */
-            padding: 20px;
-            padding-top: 20px; /* Restore top padding for screen content */
-            /* Calculate padding-bottom: Nav bar height (~70px) + extra bottom padding (e.g., 2 lines of text ~48px) = ~118px. Let's use 120px. */
-            padding-bottom: 120px; /* Ensures content doesn't get hidden behind the fixed nav bar */
-            overflow-y: auto; /* Allows content within each screen to scroll independently */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            display: none;
+            flex-grow: 1;
+            padding: 24px;
+            padding-top: 60px;
+            padding-bottom: 120px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .screen.active {
-            display: flex; /* Show active screen */
+            display: flex;
             flex-direction: column;
         }
         .fixed-nav-bar {
-            position: absolute; /* Positioned relative to its parent (#app-container) */
+            position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            z-index: 10; /* Ensure it's on top of other content */
+            z-index: 10;
         }
         .nav-button {
             flex: 1;
@@ -91,21 +95,35 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px 0; /* This padding contributes to the nav bar's height */
-            color: #6b7280;
-            font-size: 0.75rem; /* text-xs */
-            font-weight: 500; /* font-medium */
+            padding: 12px 0;
+            color: #9ca3af;
+            font-size: 0.75rem;
+            font-weight: 500;
             transition: color 0.2s ease-in-out;
         }
         .nav-button.active {
-            color: #4f46e5; /* indigo-600 */
+            color: #1f2937;
         }
         .nav-button svg {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             margin-bottom: 4px;
         }
-        /* Custom scrollbar for better UX */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+        input[type="date"] {
+            position: relative;
+        }
         .screen::-webkit-scrollbar {
             width: 8px;
         }
@@ -120,165 +138,113 @@
         .screen::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
-        /* Visual space indicator */
         .bottom-space-indicator {
-            height: 48px; /* Roughly two lines of text height */
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #6b7280;
             font-size: 0.8rem;
-            margin-top: 20px; /* Space above this indicator */
+            margin-top: 20px;
+        }
+        #loading-overlay {
+            transition: opacity 0.5s ease-in-out;
+        }
+        #transaction-form button[type="submit"]:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border-left-color: #4f46e5;
+            animation: spin 1s linear infinite;
         }
 
-        /* Styles for the new type selection buttons */
-        .type-button {
-            flex: 1;
-            padding: 12px 0;
-            border-radius: 9999px; /* Full rounded for circular/pill shape */
-            font-weight: 600; /* font-semibold */
-            text-align: center;
-            transition: all 0.2s ease-in-out;
-            border: 2px solid transparent; /* Default transparent border */
-        }
-        .type-button.expense {
-            background-color: #fee2e2; /* red-100 */
-            color: #dc2626; /* red-600 */
-        }
-        .type-button.income {
-            background-color: #dcfce7; /* green-100 */
-            color: #16a34a; /* green-600 */
-        }
-        .type-button.selected {
-            border-color: #4f46e5; /* indigo-600 border when selected */
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); /* Subtle shadow when selected */
-            transform: translateY(-2px); /* Slight lift effect */
-        }
-        /* Style for the category selection button */
-        .category-select-button {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #d1d5db; /* gray-300 */
-            border-radius: 0.75rem; /* rounded-xl */
-            background-color: #ffffff;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-            cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .category-select-button:focus {
-            outline: none;
-            border-color: #6366f1; /* indigo-500 */
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* focus:ring-indigo-500 */
-        }
-        .category-select-button .placeholder-text {
-            color: #6b7280; /* gray-500 */
-        }
-        .category-select-button .selected-text {
-            color: #1f2937; /* gray-800 */
-            font-weight: 500; /* font-medium */
-        }
-
-        /* Style for the date selection button */
-        .date-button {
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center content horizontally */
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #d1d5db; /* gray-300 */
-            border-radius: 9999px; /* Full rounded for pill shape */
-            background-color: #ffffff;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-            cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            font-weight: 500; /* font-medium */
-            color: #1f2937; /* gray-800 */
-        }
-        .date-button:focus {
-            outline: none;
-            border-color: #6366f1; /* indigo-500 */
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); /* focus:ring-indigo-500 */
-        }
-        .date-button svg {
-            width: 24px;
-            height: 24px;
-            color: #4f46e5; /* indigo-600 */
-            margin-right: 8px; /* Space between icon and text */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
     <div id="app-container">
-        <!-- Balance Card (Now acting as Header) -->
-        <div id="balance-card">
-            <div class="balance-label">လက်ရှိလက်ကျန်ငွေ</div>
-            <div id="total-balance" class="font-extrabold">၀.၀၀</div>
-            <!-- User ID and Email display element -->
+        <div class="main-header">
             <div class="user-info">
-                <span id="user-email-display" class="block">Email: N/A</span>
-                <span id="user-id-display" class="block">User ID: N/A</span>
+                <div>
+                    <div id="user-name-display" class="text-xl font-bold">ဧည့်သည်</div>
+                    <div id="user-id-display" class="text-xs text-white opacity-70 mt-1">အုပ်စု ID: ...</div>
+                </div>
+                <button id="edit-user-btn" class="flex items-center space-x-2 p-2 bg-white bg-opacity-20 text-white rounded-full shadow-md hover:bg-opacity-30 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 19.5a.75.75 0 01.75-.75h14.5a.75.75 0 01.75.75v1.25a.75.75 0 01-.75.75H5.251a.75.75 0 01-.75-.75v-1.25z" />
+                    </svg>
+                    <span class="text-sm font-medium">အမည်ပြောင်း/အုပ်စုဝင်မည်</span>
+                </button>
+            </div>
+            <div class="balance-card-container">
+                <div id="balance-card">
+                    <div class="text-center text-sm opacity-90 mb-1 text-gray-700">လက်ကျန်ငွေ</div>
+                    <div id="total-balance" class="font-extrabold text-gray-800 text-3xl">၀.၀၀ ကျပ်</div>
+                </div>
             </div>
         </div>
 
-        <!-- Screens -->
-        <div id="dashboard-screen" class="screen active">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">မကြာသေးမီက မှတ်တမ်းများ</h2>
+        <div id="loading-overlay" class="absolute inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center rounded-2xl z-20">
+            <div class="spinner"></div>
+            <p id="loading-text" class="mt-4 text-gray-600">ဒေတာများ ဆွဲယူနေပါသည်...</p>
+        </div>
+
+        <div id="dashboard-screen" class="screen">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 mt-12">မကြာသေးမီက မှတ်တမ်းများ</h2>
             <div id="recent-transactions" class="space-y-3 flex-grow">
-                <!-- Recent transactions will be loaded here -->
                 <p class="text-gray-500 text-center mt-8">မှတ်တမ်းများ မရှိသေးပါ</p>
             </div>
             <div class="bottom-space-indicator"></div>
         </div>
 
         <div id="add-transaction-screen" class="screen">
+            <h2 class="text-xl font-semibold mb-6 text-gray-800">ဝင်ငွေ/ထွက်ငွေ ထည့်သွင်းရန်</h2>
             <form id="transaction-form" class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">အမျိုးအစား</label>
-                    <div class="flex space-x-4">
-                        <button type="button" id="expense-type-btn" class="type-button expense selected" data-type="expense">
-                            ထွက်ငွေ
-                        </button>
-                        <button type="button" id="income-type-btn" class="type-button income" data-type="income">
-                            ဝင်ငွေ
+                    <label for="transaction-type" class="block text-sm font-medium text-gray-700 mb-1">အမျိုးအစား</label>
+                    <select id="transaction-type" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm">
+                        <option value="expense">ထွက်ငွေ</option>
+                        <option value="income">ဝင်ငွေ</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transaction-amount" class="block text-sm font-medium text-gray-700 mb-1">ပမာဏ (ကျပ်)</label>
+                    <input type="number" id="transaction-amount" placeholder="ဥပမာ: ၅၀၀၀" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm" required>
+                </div>
+                <div>
+                    <label for="transaction-category" class="block text-sm font-medium text-gray-700 mb-1">အမျိုးအစားခွဲ</label>
+                    <div class="relative">
+                        <select id="transaction-category" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm appearance-none pr-10" required>
+                        </select>
+                        <button type="button" id="add-category-btn-form" class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600 hover:text-gray-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
                         </button>
                     </div>
-                    <!-- Hidden input to store the selected type for form submission -->
-                    <input type="hidden" id="transaction-type" name="transaction-type" value="expense">
                 </div>
                 <div>
-                    <label for="transaction-amount" class="block text-sm font-medium text-gray-700 mb-1">ပမာဏ</label>
-                    <input type="number" id="transaction-amount" placeholder="ဥပမာ: ၅၀၀၀" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">အမျိုးအစားခွဲ</label>
-                    <div id="category-select-button" class="category-select-button">
-                        <span id="selected-category-text" class="placeholder-text">အမျိုးအစား ရွေးချယ်ပါ</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-400">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-                        </svg>
-                    </div>
-                    <!-- Hidden input to store the selected category for form submission -->
-                    <input type="hidden" id="transaction-category" name="transaction-category" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ရက်စွဲ</label>
-                    <button type="button" id="date-select-button" class="date-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12v-.008zM12 18h.008v.008H12v-.008z" />
-                        </svg>
-                        <span id="selected-date-text">ရက်စွဲ ရွေးချယ်ပါ</span>
-                    </button>
-                    <!-- Hidden input to actually handle the date selection and store the value -->
-                    <input type="date" id="hidden-transaction-date" class="hidden" required>
+                    <label for="transaction-date" class="block text-sm font-medium text-gray-700 mb-1">ရက်စွဲ</label>
+                    <input type="date" id="transaction-date" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm" required>
                 </div>
                 <div>
                     <label for="transaction-description" class="block text-sm font-medium text-gray-700 mb-1">ဖော်ပြချက် (optional)</label>
-                    <textarea id="transaction-description" rows="2" placeholder="ဥပမာ: မနက်စာ ထမင်းကြော်" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"></textarea>
+                    <textarea id="transaction-description" rows="2" placeholder="ဥပမာ: မနက်စာ ထမင်းကြော်" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm"></textarea>
                 </div>
-                <button type="submit" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:bg-indigo-700 transition duration-300">
+                <button type="submit" class="w-full py-3 bg-gray-600 text-white font-semibold rounded-xl shadow-lg hover:bg-gray-700 transition duration-300">
                     မှတ်တမ်းတင်မည်
                 </button>
             </form>
@@ -290,15 +256,12 @@
             <div class="mb-4 flex space-x-2">
                 <select id="filter-month" class="p-2 border border-gray-300 rounded-lg text-sm">
                     <option value="">လ အားလုံး</option>
-                    <!-- Months will be populated by JS -->
                 </select>
                 <select id="filter-category" class="p-2 border border-gray-300 rounded-lg text-sm flex-grow">
                     <option value="">အမျိုးအစား အားလုံး</option>
-                    <!-- Categories will be populated by JS -->
                 </select>
             </div>
             <div id="all-transactions" class="space-y-3 flex-grow">
-                <!-- All transactions will be loaded here -->
                 <p class="text-gray-500 text-center mt-8">မှတ်တမ်းများ မရှိသေးပါ</p>
             </div>
             <div class="bottom-space-indicator"></div>
@@ -308,59 +271,37 @@
             <h2 class="text-xl font-semibold mb-4 text-gray-800">အစီရင်ခံစာများ</h2>
             <div class="mb-4">
                 <label for="report-month-select" class="block text-sm font-medium text-gray-700 mb-1">လ ရွေးချယ်ပါ</label>
-                <select id="report-month-select" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                    <!-- Months will be populated by JS -->
+                <select id="report-month-select" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm">
                 </select>
             </div>
-
             <div class="bg-gray-50 p-4 rounded-xl shadow-sm mb-4">
                 <h3 class="text-lg font-medium text-gray-800 mb-2">လစဉ် ခြုံငုံသုံးသပ်ချက်</h3>
-                <p class="text-gray-700 mb-1">ဝင်ငွေစုစုပေါင်း: <span id="report-total-income" class="font-semibold text-green-600">၀.၀၀</span></p>
-                <p class="text-gray-700">ထွက်ငွေစုစုပေါင်း: <span id="report-total-expense" class="font-semibold text-red-600">၀.၀၀</span></p>
+                <p class="text-gray-700 mb-1">ဝင်ငွေစုစုပေါင်း: <span id="report-total-income" class="font-semibold text-green-600">၀.၀၀ ကျပ်</span></p>
+                <p class="text-gray-700">ထွက်ငွေစုစုပေါင်း: <span id="report-total-expense" class="font-semibold text-red-600">၀.၀၀ ကျပ်</span></p>
             </div>
-
             <h3 class="text-lg font-medium text-gray-800 mb-3">အမျိုးအစားအလိုက် ထွက်ငွေ</h3>
             <div id="category-expense-chart" class="w-full h-48 bg-gray-50 rounded-xl flex items-center justify-center text-gray-500">
-                <!-- Chart placeholder or actual chart will go here -->
                 <p>အချက်အလက် မရှိသေးပါ</p>
             </div>
             <div id="category-expense-list" class="mt-4 space-y-2">
-                <!-- Category wise expense list will be loaded here -->
             </div>
             <div class="bottom-space-indicator"></div>
         </div>
 
         <div id="categories-screen" class="screen">
             <h2 class="text-xl font-semibold mb-4 text-gray-800">အမျိုးအစားများ စီမံခန့်ခွဲရန်</h2>
-            <div class="mb-4 p-4 bg-gray-50 rounded-xl shadow-sm">
-                <h3 class="text-lg font-medium text-gray-800 mb-2">အသုံးပြုသူ အခြေအနေ</h3>
-                <div id="auth-status" class="mb-4 text-sm">
-                    <!-- Authentication status will be displayed here -->
-                </div>
-                <button id="google-sign-in-btn" class="w-full py-2 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 transition duration-300 flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.24 10.285V14.4h6.806c-.275 1.379-1.834 4.217-6.806 4.217-4.102 0-7.437-3.335-7.437-7.437s3.335-7.437 7.437-7.437c2.27 0 3.766.977 4.604 1.77l3.056-3.055C19.451 2.923 16.29 1.5 12.24 1.5 6.452 1.5 1.5 6.452 1.5 12.24s4.952 10.74 10.74 10.74c5.992 0 10.32-4.102 10.32-10.437 0-.718-.061-1.379-.172-2.02z" />
-                    </svg>
-                    <span>Google ဖြင့် ဝင်မည်</span>
-                </button>
-                <button id="sign-out-btn" class="w-full py-2 mt-2 bg-red-600 text-white font-semibold rounded-xl shadow-md hover:bg-red-700 transition duration-300 hidden">
-                    ထွက်မည်
-                </button>
-            </div>
             <div class="mb-4 flex items-center space-x-2">
-                <input type="text" id="new-category-input" placeholder="အမျိုးအစားအသစ် ထည့်ပါ" class="flex-grow p-3 border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                <button id="add-category-btn" class="p-3 bg-indigo-600 text-white rounded-xl shadow-md hover:bg-indigo-700 transition duration-300">
+                <input type="text" id="new-category-input" placeholder="အမျိုးအစားအသစ် ထည့်ပါ" class="flex-grow p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm">
+                <button id="add-category-btn" class="p-3 bg-gray-600 text-white rounded-xl shadow-md hover:bg-gray-700 transition duration-300">
                     ထည့်မည်
                 </button>
             </div>
             <div id="category-list" class="space-y-2 flex-grow">
-                <!-- Categories will be loaded here -->
             </div>
             <div class="bottom-space-indicator"></div>
         </div>
 
-        <!-- Navigation Bar (Fixed at bottom of app-container) -->
-        <div class="fixed-nav-bar flex justify-around bg-white border-t border-gray-200 p-2 shadow-lg">
+        <div class="fixed-nav-bar flex justify-around bg-white border-t border-gray-200 p-2 shadow-lg rounded-t-2xl">
             <button class="nav-button active" data-screen="dashboard-screen">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125h9.75a1.125 1.125 0 001.125-1.125V9.75M8.25 21h8.25" />
@@ -395,8 +336,7 @@
         </div>
     </div>
 
-    <!-- Custom Alert/Confirmation Modal -->
-    <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+    <div id="custom-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm">
             <h3 id="modal-title" class="text-xl font-semibold mb-4 text-gray-800"></h3>
             <p id="modal-message" class="text-gray-700 mb-6"></p>
@@ -407,49 +347,52 @@
         </div>
     </div>
 
-    <script type="module">
-        // Firebase Imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, setDoc, getDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <div id="username-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">အမည်ပြောင်း/အုပ်စုဝင်မည်</h3>
+            <p class="text-gray-700 mb-4">အုပ်စုအမည် (Nickname) ကို ထည့်သွင်းပါ။</p>
+            <input type="text" id="username-input" placeholder="အုပ်စုအမည်" class="w-full p-3 border border-gray-300 rounded-xl focus:ring-gray-500 focus:border-gray-500 shadow-sm mb-4">
+            <div class="flex justify-end space-x-3">
+                <button id="cancel-username-btn" class="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition duration-300">ပယ်ဖျက်မည်</button>
+                <button id="clear-username-btn" class="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-300">အုပ်စုအားလုံးဖျက်မည်</button>
+                <button id="save-username-btn" class="px-5 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300">သိမ်းမည်</button>
+            </div>
+        </div>
+    </div>
 
-        // Your provided Firebase configuration - now hardcoded
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration ကို ဒီနေရာမှာ ထည့်သွင်းပေးထားပါတယ်။
         const firebaseConfig = {
-            apiKey: "AIzaSyDUf0QF4GqMb6s9ODTUiX7aTHRTR0YUqcE",
-            authDomain: "html-3ce83.firebaseapp.com",
-            databaseURL: "https://html-3ce83-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "html-3ce83",
-            storageBucket: "html-3ce83.firebasestorage.app",
-            messagingSenderId: "602585837585",
-            appId: "1:602585837585:web:415bd8bcc59b4cbd4d81b0",
-            measurementId: "G-QBME7CRR2X"
+            apiKey: "AIzaSyCbXKrJ-4XlafXS9glgys9T5d9ZNSYjwWM",
+            authDomain: "mmh-fe555.firebaseapp.com",
+            projectId: "mmh-fe555",
+            storageBucket: "mmh-fe555.firebasestorage.app",
+            messagingSenderId: "174472059635",
+            appId: "1:174472059635:web:f1558d060d3107f99d7586",
+            measurementId: "G-5N8J1MQKFR"
         };
 
-        // Using appId directly from the provided firebaseConfig
-        const appId = firebaseConfig.appId;
+        const __app_id = "mmh-fe555";
+        const __firebase_config = JSON.stringify(firebaseConfig);
+        const __initial_auth_token = ""; // Placeholder, as it will be provided by the environment
 
-        // Firebase instances
-        let app;
-        let db;
-        let auth;
-        let currentUserId = null; // Stores the authenticated user's ID
-        let currentUserEmail = null; // To store user email (from Google profile)
-        let isAuthReady = false; // Flag to ensure Firestore operations only happen after authentication
-
-        // Data storage (now populated by Firestore listeners)
-        let transactions = [];
-        let categories = [];
-
-        // Global variable to store the selected category when returning from categories screen
-        let selectedCategoryForForm = '';
+        // Global variables for Firebase
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfigFromEnv = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
 
         // DOM Elements
         const totalBalanceEl = document.getElementById('total-balance');
         const screens = document.querySelectorAll('.screen');
         const navButtons = document.querySelectorAll('.nav-button');
         const transactionForm = document.getElementById('transaction-form');
+        const transactionTypeEl = document.getElementById('transaction-type');
         const transactionAmountEl = document.getElementById('transaction-amount');
-        const hiddenTransactionDateInput = document.getElementById('hidden-transaction-date');
+        const transactionCategoryEl = document.getElementById('transaction-category');
+        const transactionDateEl = document.getElementById('transaction-date');
         const transactionDescriptionEl = document.getElementById('transaction-description');
         const recentTransactionsEl = document.getElementById('recent-transactions');
         const allTransactionsEl = document.getElementById('all-transactions');
@@ -462,66 +405,43 @@
         const categoryExpenseListEl = document.getElementById('category-expense-list');
         const newCategoryInput = document.getElementById('new-category-input');
         const addCategoryBtn = document.getElementById('add-category-btn');
+        const addCategoryBtnForm = document.getElementById('add-category-btn-form');
         const categoryListEl = document.getElementById('category-list');
-
-        // User ID and Email display elements
-        const userIdDisplayEl = document.getElementById('user-id-display');
-        const userEmailDisplayEl = document.getElementById('user-email-display'); // New element for email
-
-        // New DOM elements for Google Sign-In
-        const googleSignInBtn = document.getElementById('google-sign-in-btn');
-        const signOutBtn = document.getElementById('sign-out-btn');
-        const authStatusDiv = document.getElementById('auth-status'); // Div to show auth status
-
-        // Elements for type selection buttons
-        const expenseTypeBtn = document.getElementById('expense-type-btn');
-        const incomeTypeBtn = document.getElementById('income-type-btn');
-        const hiddenTransactionTypeInput = document.getElementById('transaction-type'); // Hidden input to store selected type
-
-        // Elements for new category selection button
-        const categorySelectButton = document.getElementById('category-select-button');
-        const selectedCategoryText = document.getElementById('selected-category-text');
-        const hiddenTransactionCategoryInput = document.getElementById('transaction-category'); // Hidden input to store selected category
-
-        // Elements for new date selection button
-        const dateSelectButton = document.getElementById('date-select-button');
-        const selectedDateText = document.getElementById('selected-date-text');
-
-        // Modal elements
         const customModal = document.getElementById('custom-modal');
         const modalTitle = document.getElementById('modal-title');
         const modalMessage = document.getElementById('modal-message');
         const modalCancelBtn = document.getElementById('modal-cancel-btn');
         const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const userNameDisplay = document.getElementById('user-name-display');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const editUserBtn = document.getElementById('edit-user-btn');
+        const usernameModal = document.getElementById('username-modal');
+        const usernameInput = document.getElementById('username-input');
+        const saveUsernameBtn = document.getElementById('save-username-btn');
+        const cancelUsernameBtn = document.getElementById('cancel-username-btn');
+        const clearUsernameBtn = document.getElementById('clear-username-btn');
+        const transactionSubmitBtn = document.querySelector('#transaction-form button[type="submit"]');
 
-        let confirmActionCallback = null; // To store the callback for confirmation
-
-        // Function to show custom modal (replaces alert/confirm)
-        function showCustomModal(title, message, onConfirm, onCancel = null) {
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-            customModal.classList.remove('hidden');
-            confirmActionCallback = onConfirm;
-
-            modalConfirmBtn.onclick = () => {
-                customModal.classList.add('hidden');
-                if (confirmActionCallback) confirmActionCallback();
-            };
-
-            modalCancelBtn.onclick = () => {
-                customModal.classList.add('hidden');
-                if (onCancel) onCancel();
-            };
-        }
+        // Global data and state
+        let db = null;
+        let auth = null;
+        let userId = null;
+        let groupId = null;
+        let username = 'ဧည့်သည်';
+        let transactions = [];
+        let categories = [];
+        let confirmActionCallback = null;
+        let authReady = false;
+        let transactionUnsubscribe = null;
+        let categoriesUnsubscribe = null;
 
         // --- Utility Functions ---
-
-        // Format currency (no "ကျပ်" suffix)
         function formatCurrency(amount) {
-            return amount.toLocaleString();
+            return `${amount.toLocaleString()} ကျပ်`;
         }
 
-        // Get current date in YYYY-MM-DD format
         function getCurrentDate() {
             const today = new Date();
             const year = today.getFullYear();
@@ -530,7 +450,6 @@
             return `${year}-${month}-${day}`;
         }
 
-        // Get month name in Burmese
         function getMyanmarMonthName(monthIndex) {
             const months = [
                 'ဇန်နဝါရီ', 'ဖေဖော်ဝါရီ', 'မတ်', 'ဧပြီ', 'မေ', 'ဇွန်',
@@ -539,142 +458,7 @@
             return months[monthIndex];
         }
 
-        // Format date for display on the button (e.g., "၇ ဇူလိုင် ၂၀၂၅")
-        function formatDisplayDate(dateString) {
-            if (!dateString) return 'ရက်စွဲ ရွေးချယ်ပါ';
-            const date = new Date(dateString);
-            const day = date.getDate();
-            const month = getMyanmarMonthName(date.getMonth());
-            const year = date.getFullYear();
-            return `${day} ${month} ${year}`;
-        }
-
-        // Display user ID and Email
-        window.displayUserId = function() {
-            if (userEmailDisplayEl) {
-                userEmailDisplayEl.textContent = `Email: ${currentUserEmail || 'N/A'}`;
-            }
-            if (userIdDisplayEl) {
-                userIdDisplayEl.textContent = `User ID: ${currentUserId || 'N/A (Authentication Pending)'}`;
-            }
-
-            // Update auth status section on categories screen
-            if (authStatusDiv) {
-                if (currentUserId) {
-                    authStatusDiv.innerHTML = `
-                        <p class="text-gray-700">လက်ရှိအသုံးပြုသူ:</p>
-                        <p class="font-semibold text-gray-800 break-all">${currentUserEmail || 'အမည်မသိ'}</p>
-                        <p class="text-xs text-gray-500 break-all">UID: ${currentUserId}</p>
-                    `;
-                    googleSignInBtn.classList.add('hidden');
-                    signOutBtn.classList.remove('hidden');
-                } else {
-                    authStatusDiv.innerHTML = `<p class="text-gray-500">ဝင်ရောက်ထားခြင်း မရှိသေးပါ</p>`;
-                    googleSignInBtn.classList.remove('hidden');
-                    signOutBtn.classList.add('hidden');
-                }
-            }
-        };
-
-        // --- Firebase Initialization and Authentication ---
-
-        // Initialize Firebase app and services using the provided firebaseConfig
-        app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        auth = getAuth(app);
-
-        // Authentication state listener
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                currentUserEmail = user.email; // Get email from Google profile
-                isAuthReady = true;
-                // Set up Firestore listeners only after authentication is ready
-                setupFirestoreListeners();
-                displayUserId(); // Update UI with user ID and email
-            } else {
-                currentUserId = null;
-                currentUserEmail = null;
-                isAuthReady = false;
-                // If no user is signed in, try to sign in anonymously to ensure data persistence
-                // This will create a new anonymous user in *your* Firebase project
-                try {
-                    await signInAnonymously(auth);
-                } catch (error) {
-                    console.error("Error signing in anonymously:", error);
-                    showCustomModal("Authentication Error", `အမည်မသိ ဝင်ရောက်၍ မရပါ: ${error.message}`, () => {}, null);
-                }
-                displayUserId(); // Update UI to show "N/A" and login button
-            }
-        });
-
-        // Google Sign-In
-        googleSignInBtn.addEventListener('click', async () => {
-            const provider = new GoogleAuthProvider();
-            try {
-                await signInWithPopup(auth, provider);
-                // onAuthStateChanged will handle updating UI and listeners
-            } catch (error) {
-                console.error("Google Sign-In Error:", error);
-                showCustomModal("ဝင်ရောက်မှုအမှား", `Google ဖြင့် ဝင်ရောက်၍ မရပါ။: ${error.message}`, () => {}, null);
-            }
-        });
-
-        // Sign Out
-        signOutBtn.addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                // onAuthStateChanged will handle resetting UI and listeners
-                showCustomModal("ထွက်ခွာပြီးပါပြီ", "အောင်မြင်စွာ ထွက်ခွာပြီးပါပြီ။", () => {}, null);
-            } catch (error) {
-                console.error("Sign Out Error:", error);
-                showCustomModal("ထွက်ခွာမှုအမှား", `ထွက်ခွာ၍ မရပါ။: ${error.message}`, () => {}, null);
-            }
-        });
-
-        // --- Firestore Data Listeners ---
-
-        // Sets up real-time listeners for transactions and categories
-        window.setupFirestoreListeners = function() {
-            if (!db || !currentUserId || !isAuthReady) {
-                console.log("Firestore or user not ready. Skipping listener setup.");
-                return;
-            }
-
-            // Using secure, user-specific paths (UID based)
-            const transactionsColRef = collection(db, `artifacts/${appId}/users/${currentUserId}/transactions`);
-            const qTransactions = query(transactionsColRef, orderBy('timestamp', 'desc')); 
-
-            onSnapshot(qTransactions, (snapshot) => {
-                transactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateTotalBalance();
-                renderRecentTransactions();
-                renderAllTransactions();
-                populateFilterMonths();
-                populateReportMonths();
-                updateReports();
-            }, (error) => {
-                console.error("Error fetching transactions:", error);
-                showCustomModal("Data Error", `Error loading transactions: ${error.message}`, () => {}, null);
-            });
-
-            // Using secure, user-specific paths (UID based)
-            const categoriesColRef = collection(db, `artifacts/${appId}/users/${currentUserId}/categories`);
-            const qCategories = query(categoriesColRef, orderBy('name')); 
-
-            onSnapshot(qCategories, (snapshot) => {
-                categories = snapshot.docs.map(doc => doc.data().name); 
-                populateFilterCategories();
-                renderCategoryList();
-            }, (error) => {
-                console.error("Error fetching categories:", error);
-                showCustomModal("Data Error", `Error loading categories: ${error.message}`, () => {}, null);
-            });
-        };
-
         // --- UI Management ---
-
-        // Show a specific screen and update navigation active state
         function showScreen(screenId) {
             screens.forEach(screen => {
                 screen.classList.remove('active');
@@ -689,31 +473,13 @@
                 }
             });
 
-            // Specific updates when screen changes
-            if (screenId === 'dashboard-screen') {
-                renderRecentTransactions();
-            } else if (screenId === 'add-transaction-screen') {
-                populateFilterCategories(); // Ensure categories are up-to-date for selection
-                
-                // Set default date and update button text
-                const currentDate = getCurrentDate();
-                hiddenTransactionDateInput.value = currentDate;
-                selectedDateText.textContent = formatDisplayDate(currentDate);
-
-                selectTransactionType('expense'); // Set default selected type to 'expense'
-
-                // Update category selection display based on previously selected category
-                if (selectedCategoryForForm) {
-                    selectedCategoryText.textContent = selectedCategoryForForm;
-                    selectedCategoryText.classList.remove('placeholder-text');
-                    selectedCategoryText.classList.add('selected-text');
-                    hiddenTransactionCategoryInput.value = selectedCategoryForForm;
-                } else {
-                    selectedCategoryText.textContent = 'အမျိုးအစား ရွေးချယ်ပါ';
-                    selectedCategoryText.classList.add('placeholder-text');
-                    selectedCategoryText.classList.remove('selected-text');
-                    hiddenTransactionCategoryInput.value = ''; // Clear hidden input if no category selected
+            if (screenId === 'add-transaction-screen') {
+                if (!groupId) {
+                    showCustomModal('သတိပေးချက်', 'မှတ်တမ်းမထည့်မီ အုပ်စုအမည်ကို အရင်သတ်မှတ်ပါ။', showUsernameModal, () => { showScreen('dashboard-screen') });
+                    return;
                 }
+                populateCategoriesDropdown();
+                transactionDateEl.value = getCurrentDate();
             } else if (screenId === 'transactions-list-screen') {
                 populateFilterMonths();
                 populateFilterCategories();
@@ -723,27 +489,10 @@
                 updateReports();
             } else if (screenId === 'categories-screen') {
                 renderCategoryList();
-                displayUserId(); // Update auth status on categories screen
             }
         }
 
-        // Function to handle type button selection (Expense/Income)
-        function selectTransactionType(type) {
-            expenseTypeBtn.classList.remove('selected');
-            incomeTypeBtn.classList.remove('selected');
-
-            if (type === 'expense') {
-                expenseTypeBtn.classList.add('selected');
-            } else if (type === 'income') {
-                incomeTypeBtn.classList.add('selected');
-            }
-            hiddenTransactionTypeInput.value = type;
-        }
-
-        // --- Core Functionality (Firestore Interactions) ---
-
-        // Calculate and display total balance
-        window.updateTotalBalance = function() {
+        function updateTotalBalance() {
             let totalIncome = 0;
             let totalExpense = 0;
 
@@ -763,65 +512,15 @@
             } else if (balance < 0) {
                 totalBalanceEl.classList.add('text-red-600');
             }
-        };
+        }
 
-        // Add a new transaction to Firestore
-        transactionForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (!db || !currentUserId) {
-                showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
-                return;
-            }
-
-            const type = hiddenTransactionTypeInput.value;
-            const amount = parseFloat(transactionAmountEl.value);
-            const category = hiddenTransactionCategoryInput.value;
-            const date = hiddenTransactionDateInput.value;
-            const description = transactionDescriptionEl.value.trim();
-
-            if (isNaN(amount) || amount <= 0) {
-                showCustomModal('အမှား', 'ပမာဏကို မှန်ကန်စွာ ထည့်သွင်းပါ။', () => {}, null);
-                return;
-            }
-            if (!category) {
-                showCustomModal('အမှား', 'အမျိုးအစားခွဲကို ရွေးချယ်ပါ။', () => {}, null);
-                return;
-            }
-            if (!date) {
-                showCustomModal('အမှား', 'ရက်စွဲကို ရွေးချယ်ပါ။', () => {}, null);
-                return;
-            }
-
-            const newTransactionData = {
-                type,
-                amount,
-                category,
-                date,
-                description,
-                timestamp: new Date().toISOString() // For sorting/tracking
-            };
-            
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/users/${currentUserId}/transactions`), newTransactionData);
-                transactionForm.reset(); // Clear form fields
-                selectedCategoryForForm = ''; // Clear selected category for next transaction
-                showScreen('dashboard-screen'); // Go back to dashboard after adding
-            } catch (error) {
-                console.error("Error adding transaction:", error);
-                showCustomModal("ထည့်သွင်းမှုအမှား", `မှတ်တမ်းထည့်သွင်း၍ မရပါ။: ${error.message}`, () => {}, null);
-            }
-        });
-
-        // Render recent transactions on dashboard
-        window.renderRecentTransactions = function() {
+        function renderRecentTransactions() {
             recentTransactionsEl.innerHTML = '';
             if (transactions.length === 0) {
                 recentTransactionsEl.innerHTML = '<p class="text-gray-500 text-center mt-8">မှတ်တမ်းများ မရှိသေးပါ</p>';
                 return;
             }
 
-            // Display up to 5 most recent transactions
             transactions.slice(0, 5).forEach(t => {
                 const transactionItem = document.createElement('div');
                 transactionItem.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100');
@@ -831,24 +530,22 @@
                 transactionItem.innerHTML = `
                     <div>
                         <div class="font-medium text-gray-800">${t.category}</div>
-                        <div class="text-xs text-gray-500">${t.description || 'မရှိပါ'}</div>
+                        <div class="text-xs text-gray-500">${t.description || 'ဖော်ပြချက် မရှိပါ'}</div>
                         <div class="text-xs text-gray-400">${t.date}</div>
                     </div>
                     <div class="font-semibold ${amountClass}">${sign} ${formatCurrency(t.amount)}</div>
                 `;
                 recentTransactionsEl.appendChild(transactionItem);
             });
-        };
+        }
 
-        // Render all transactions list, with filtering and grouping by date
-        window.renderAllTransactions = function() {
+        function renderAllTransactions() {
             allTransactionsEl.innerHTML = '';
             let filteredTransactions = transactions;
 
             const selectedMonth = filterMonthEl.value;
             const selectedCategory = filterCategoryEl.value;
 
-            // Apply month filter
             if (selectedMonth) {
                 filteredTransactions = filteredTransactions.filter(t => {
                     const transactionDate = new Date(t.date);
@@ -859,7 +556,6 @@
                 });
             }
 
-            // Apply category filter
             if (selectedCategory) {
                 filteredTransactions = filteredTransactions.filter(t => t.category === selectedCategory);
             }
@@ -869,7 +565,6 @@
                 return;
             }
 
-            // Group transactions by date
             const groupedTransactions = filteredTransactions.reduce((acc, t) => {
                 const date = t.date;
                 if (!acc[date]) {
@@ -879,17 +574,13 @@
                 return acc;
             }, {});
 
-            // Sort dates in descending order (most recent first)
             const sortedDates = Object.keys(groupedTransactions).sort((a, b) => new Date(b) - new Date(a));
 
             sortedDates.forEach(date => {
                 const dateHeader = document.createElement('div');
                 dateHeader.classList.add('text-sm', 'font-semibold', 'text-gray-600', 'mt-4', 'mb-2', 'border-b', 'pb-1');
-                dateHeader.textContent = formatDisplayDate(date); // Display formatted date
+                dateHeader.textContent = date;
                 allTransactionsEl.appendChild(dateHeader);
-
-                // Sort transactions within each date by timestamp (most recent first)
-                groupedTransactions[date].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
                 groupedTransactions[date].forEach(t => {
                     const transactionItem = document.createElement('div');
@@ -900,7 +591,7 @@
                     transactionItem.innerHTML = `
                         <div>
                             <div class="font-medium text-gray-800">${t.category}</div>
-                            <div class="text-xs text-gray-500">${t.description || 'မရှိပါ'}</div>
+                            <div class="text-xs text-gray-500">${t.description || 'ဖော်ပြချက် မရှိပါ'}</div>
                         </div>
                         <div class="flex items-center space-x-2">
                             <div class="font-semibold ${amountClass}">${sign} ${formatCurrency(t.amount)}</div>
@@ -915,10 +606,9 @@
                 });
             });
 
-            // Add event listeners for delete buttons
             document.querySelectorAll('.delete-transaction-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
-                    const transactionId = e.currentTarget.dataset.id; // Get the ID from the button's data attribute
+                    const transactionId = e.currentTarget.dataset.id;
                     showCustomModal(
                         'ဖျက်မည်လား',
                         'ဤမှတ်တမ်းကို ဖျက်ရန် သေချာပါသလား။',
@@ -926,59 +616,59 @@
                     );
                 });
             });
-        };
+        }
 
-        // Delete a transaction from Firestore
         async function deleteTransaction(id) {
-            if (!db || !currentUserId) {
-                showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
-                return;
-            }
             try {
-                await deleteDoc(doc(db, `artifacts/${appId}/users/${currentUserId}/transactions`, id));
-                // onSnapshot listener will automatically update the UI
+                if (!authReady || !groupId) {
+                    showCustomModal('အမှား', 'ဒေတာ ဖျက်ခွင့် မရှိပါ။', () => {}, null);
+                    return;
+                }
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'transactions', id);
+                await deleteDoc(docRef);
+                console.log("Document successfully deleted!");
             } catch (error) {
-                console.error("Error deleting transaction:", error);
-                showCustomModal("ဖျက်မှုအမှား", `မှတ်တမ်းကို ဖျက်၍မရပါ။: ${error.message}`, () => {}, null);
+                console.error("Error removing document: ", error);
+                showCustomModal('အမှား', 'မှတ်တမ်းဖျက်၍ မရပါ။ ကျေးဇူးပြု၍ ပြန်လည်စမ်းသပ်ပါ။', () => {}, null);
             }
         }
 
-        // Populate category dropdowns (for filter and add transaction screen)
-        window.populateFilterCategories = function() {
-            const selectEl = filterCategoryEl;
-            const currentSelected = selectEl.value; // Preserve current selection
-            selectEl.innerHTML = '';
-            const allOption = document.createElement('option');
-            allOption.value = '';
-            allOption.textContent = 'အမျိုးအစား အားလုံး';
-            selectEl.appendChild(allOption);
-
-            categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                selectEl.appendChild(option);
+        function populateCategoriesDropdown() {
+            const categorySelects = [transactionCategoryEl, filterCategoryEl];
+            categorySelects.forEach(selectEl => {
+                const currentSelected = selectEl.value;
+                selectEl.innerHTML = '';
+                if (selectEl.id === 'filter-category') {
+                    const allOption = document.createElement('option');
+                    allOption.value = '';
+                    allOption.textContent = 'အမျိုးအစား အားလုံး';
+                    selectEl.appendChild(allOption);
+                }
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat;
+                    option.textContent = cat;
+                    selectEl.appendChild(option);
+                });
+                selectEl.value = currentSelected;
             });
-            selectEl.value = currentSelected; // Restore current selection
-        };
+        }
 
-        // Populate month filter dropdown based on existing transactions
-        window.populateFilterMonths = function() {
+        function populateFilterMonths() {
             filterMonthEl.innerHTML = '<option value="">လ အားလုံး</option>';
             const monthsSet = new Set();
             transactions.forEach(t => {
                 const date = new Date(t.date);
                 const year = date.getFullYear();
                 const month = date.getMonth();
-                monthsSet.add(`${year}-${month}`); // Store as "YYYY-MM"
+                monthsSet.add(`${year}-${month}`);
             });
 
-            // Sort months in descending order (most recent first)
             const sortedMonths = Array.from(monthsSet).sort((a, b) => {
                 const [yearA, monthA] = a.split('-').map(Number);
                 const [yearB, monthB] = b.split('-').map(Number);
-                if (yearA !== yearB) return yearB - yearA; // Sort by year
-                return monthB - monthA; // Then by month
+                if (yearA !== yearB) return yearB - yearA;
+                return monthB - monthA;
             });
 
             sortedMonths.forEach(monthKey => {
@@ -988,10 +678,9 @@
                 option.textContent = `${getMyanmarMonthName(monthIndex)} ${year}`;
                 filterMonthEl.appendChild(option);
             });
-        };
+        }
 
-        // Populate report month select dropdown
-        window.populateReportMonths = function() {
+        function populateReportMonths() {
             reportMonthSelectEl.innerHTML = '';
             const monthsSet = new Set();
             transactions.forEach(t => {
@@ -1008,7 +697,6 @@
                 return monthB - monthA;
             });
 
-            // If no transactions exist, add current month as default for reports
             if (sortedMonths.length === 0) {
                 const currentMonth = new Date();
                 const currentYear = currentMonth.getFullYear();
@@ -1026,22 +714,20 @@
                     reportMonthSelectEl.appendChild(option);
                 });
             }
-        };
+        }
 
-        // Update reports based on selected month
-        window.updateReports = function() {
+        function updateReports() {
             const selectedMonthKey = reportMonthSelectEl.value;
             if (!selectedMonthKey) {
                 reportTotalIncomeEl.textContent = formatCurrency(0);
                 reportTotalExpenseEl.textContent = formatCurrency(0);
-                categoryExpenseChartEl.innerHTML = '<p class="text-gray-500">အချက်အလက် မရှိသေးပါ</p>';
+                categoryExpenseChartEl.innerHTML = '<p>အချက်အလက် မရှိသေးပါ</p>';
                 categoryExpenseListEl.innerHTML = '';
                 return;
             }
 
             const [selectedYear, selectedMonthIndex] = selectedMonthKey.split('-').map(Number);
 
-            // Filter transactions for the selected month
             const monthlyTransactions = transactions.filter(t => {
                 const date = new Date(t.date);
                 return date.getFullYear() === selectedYear && date.getMonth() === selectedMonthIndex;
@@ -1049,7 +735,7 @@
 
             let totalIncome = 0;
             let totalExpense = 0;
-            const categoryExpenses = {}; // To store expense breakdown by category
+            const categoryExpenses = {};
 
             monthlyTransactions.forEach(t => {
                 if (t.type === 'income') {
@@ -1065,19 +751,16 @@
 
             renderCategoryExpenseChart(categoryExpenses, totalExpense);
             renderCategoryExpenseList(categoryExpenses);
-        };
+        }
 
-        // Render category expense chart (simple bar chart representation)
         function renderCategoryExpenseChart(data, totalExpense) {
             categoryExpenseChartEl.innerHTML = '';
             if (Object.keys(data).length === 0 || totalExpense === 0) {
-                categoryExpenseChartEl.innerHTML = '<p class="text-gray-500">အချက်အလက် မရှိသေးပါ</p>';
+                categoryExpenseChartEl.innerHTML = '<p>အချက်အလက် မရှိသေးပါ</p>';
                 return;
             }
 
-            // Sort categories by expense amount in descending order
             const sortedCategories = Object.entries(data).sort(([, a], [, b]) => b - a);
-
             const chartContainer = document.createElement('div');
             chartContainer.classList.add('w-full', 'h-full', 'flex', 'flex-col', 'justify-end', 'p-2');
 
@@ -1088,7 +771,7 @@
                 bar.innerHTML = `
                     <div class="text-xs text-gray-700 w-1/3 truncate">${category}</div>
                     <div class="flex-grow bg-gray-200 rounded-full h-2 mx-2 overflow-hidden">
-                        <div class="bg-indigo-500 h-full rounded-full" style="width: ${percentage.toFixed(0)}%;"></div>
+                        <div class="bg-gray-500 h-full rounded-full" style="width: ${percentage.toFixed(0)}%;"></div>
                     </div>
                     <div class="text-xs font-medium text-gray-700 w-1/6 text-right">${percentage.toFixed(0)}%</div>
                 `;
@@ -1097,14 +780,12 @@
             categoryExpenseChartEl.appendChild(chartContainer);
         }
 
-        // Render category expense list
         function renderCategoryExpenseList(data) {
             categoryExpenseListEl.innerHTML = '';
             if (Object.keys(data).length === 0) {
                 return;
             }
 
-            // Sort categories by expense amount in descending order
             const sortedCategories = Object.entries(data).sort(([, a], [, b]) => b - a);
 
             sortedCategories.forEach(([category, amount]) => {
@@ -1118,8 +799,7 @@
             });
         }
 
-        // Render category list for management screen
-        window.renderCategoryList = function() {
+        function renderCategoryList() {
             categoryListEl.innerHTML = '';
             if (categories.length === 0) {
                 categoryListEl.innerHTML = '<p class="text-gray-500 text-center mt-8">အမျိုးအစားများ မရှိသေးပါ</p>';
@@ -1127,9 +807,9 @@
             }
             categories.forEach(cat => {
                 const categoryItem = document.createElement('div');
-                categoryItem.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'cursor-pointer');
+                categoryItem.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-4', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100');
                 categoryItem.innerHTML = `
-                    <span class="font-medium text-gray-800" data-category-name="${cat}">${cat}</span>
+                    <span class="font-medium text-gray-800">${cat}</span>
                     <button data-category="${cat}" class="delete-category-btn text-red-500 hover:text-red-700 p-1 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.927a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m-1.022.165L5.67 19.673a2.25 2.25 0 002.244 2.077h8.927a2.25 2.25 0 002.244-2.077L19.5 5.79m-9.444.114c-.276-.053-.55-.108-.822-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.14-2.006-2.201C16.152 2.15 15.174 2.1 12 2.1c-3.174 0-4.152.05-4.444.093C6.106 2.45 5.25 3.42 5.25 4.5V5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m-1.022.165L5.67 19.673a2.25 2.25 0 002.244 2.077h8.927a2.25 2.25 0 002.244-2.077L19.5 5.79" />
@@ -1137,21 +817,10 @@
                     </button>
                 `;
                 categoryListEl.appendChild(categoryItem);
-
-                // Event listener to select a category when clicked (for add transaction screen)
-                categoryItem.addEventListener('click', (e) => {
-                    // Only trigger selection if not clicking the delete button
-                    if (!e.target.closest('.delete-category-btn')) {
-                        const categoryName = e.currentTarget.querySelector('span').dataset.categoryName;
-                        selectedCategoryForForm = categoryName; // Store selected category
-                        showScreen('add-transaction-screen'); // Navigate back to add transaction screen
-                    }
-                });
             });
 
-            // Add event listeners for delete category buttons
             document.querySelectorAll('.delete-category-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
+                button.addEventListener('click', async (e) => {
                     const categoryToDelete = e.currentTarget.dataset.category;
                     showCustomModal(
                         'ဖျက်မည်လား',
@@ -1160,98 +829,342 @@
                     );
                 });
             });
-        };
+        }
 
-        // Add a new category to Firestore
-        addCategoryBtn.addEventListener('click', async () => {
-            if (!db || !currentUserId) {
-                showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
-                return;
-            }
-            const newCat = newCategoryInput.value.trim();
-            if (newCat) {
-                // Check if category already exists locally (from Firestore snapshot)
-                if (categories.includes(newCat)) {
-                    showCustomModal('အမှား', 'ဤအမျိုးအစား ရှိပြီးသားဖြစ်ပါသည်။', () => {}, null);
+        async function deleteCategory(catToDelete) {
+            try {
+                if (!authReady || !groupId) {
+                    showCustomModal('အမှား', 'ဒေတာ ဖျက်ခွင့် မရှိပါ။', () => {}, null);
                     return;
                 }
-                try {
-                    await addDoc(collection(db, `artifacts/${appId}/users/${currentUserId}/categories`), { name: newCat });
-                    newCategoryInput.value = ''; // Clear input field
-                    // onSnapshot listener will automatically update the UI
-                } catch (error) {
-                    console.error("Error adding category:", error);
-                    showCustomModal("ထည့်သွင်းမှုအမှား", `အမျိုးအစားထည့်သွင်း၍ မရပါ။: ${error.message}`, () => {}, null);
-                }
-            }
-        });
-
-        // Delete a category from Firestore
-        async function deleteCategory(catToDelete) {
-            if (!db || !currentUserId) {
-                showCustomModal("အမှား", "အသုံးပြုသူ အတည်ပြုပြီးခြင်းမရှိပါ။", () => {}, null);
-                return;
-            }
-            const categoriesColRef = collection(db, `artifacts/${appId}/users/${currentUserId}/categories`);
-            const q = query(categoriesColRef, where('name', '==', catToDelete));
-            try {
-                const querySnapshot = await getDocs(q); // Get documents matching the query
-                if (!querySnapshot.empty) {
-                    const docToDelete = querySnapshot.docs[0]; // Get the first matching document
-                    await deleteDoc(doc(db, `artifacts/${appId}/users/${currentUserId}/categories`, docToDelete.id));
-                    // onSnapshot listener will automatically update the UI
-                } else {
-                    showCustomModal('အမှား', 'ဖျက်ရန် အမျိုးအစားကို ရှာမတွေ့ပါ။', () => {}, null);
-                }
+                const q = query(collection(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'categories'), where("name", "==", catToDelete));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach(async (d) => {
+                    await deleteDoc(d.ref);
+                });
             } catch (error) {
-                console.error("Error deleting category:", error);
-                showCustomModal("ဖျက်မှုအမှား", `အမျိုးအစားကို ဖျက်၍မရပါ။: ${error.message}`, () => {}, null);
+                console.error("Error deleting category: ", error);
+                showCustomModal('အမှား', 'အမျိုးအစား ဖျက်၍ မရပါ။ ကျေးဇူးပြု၍ ပြန်လည်စမ်းသပ်ပါ။', () => {}, null);
             }
         }
 
-        // --- Event Listeners ---
+        function showCustomModal(title, message, onConfirm, onCancel = null) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            customModal.classList.remove('hidden');
+            modalConfirmBtn.onclick = () => {
+                customModal.classList.add('hidden');
+                if (onConfirm) onConfirm();
+            };
 
-        // Navigation buttons to switch screens
+            modalCancelBtn.onclick = () => {
+                customModal.classList.add('hidden');
+                if (onCancel) onCancel();
+            };
+        }
+
+        function showUsernameModal() {
+            usernameModal.classList.remove('hidden');
+        }
+
+        function hideUsernameModal() {
+            usernameModal.classList.add('hidden');
+        }
+
+        function subscribeToData() {
+            if (!groupId) return;
+
+            if (transactionUnsubscribe) transactionUnsubscribe();
+            if (categoriesUnsubscribe) categoriesUnsubscribe();
+
+            const groupTransactionsCollection = collection(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'transactions');
+            const groupCategoriesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'categories');
+
+            transactionUnsubscribe = onSnapshot(groupTransactionsCollection, (querySnapshot) => {
+                transactions = [];
+                querySnapshot.forEach((d) => {
+                    const data = d.data();
+                    transactions.push({ id: d.id, ...data });
+                });
+                transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                updateAllUI();
+                console.log("Transactions updated for group:", groupId);
+            }, (error) => {
+                console.error("Error fetching transactions: ", error);
+            });
+
+            categoriesUnsubscribe = onSnapshot(groupCategoriesCollection, (querySnapshot) => {
+                categories = [];
+                querySnapshot.forEach((d) => {
+                    categories.push(d.data().name);
+                });
+                if (categories.length === 0) {
+                    const defaultCats = ['အစားအသောက်', 'သယ်ယူပို့ဆောင်ရေး', 'အိမ်လခ', 'ဖျော်ဖြေရေး', 'ပညာရေး', 'ကျန်းမာရေး', 'အဝတ်အထည်', 'အလှူဒါန', 'အခြား'];
+                    defaultCats.forEach(async cat => {
+                        await addDoc(groupCategoriesCollection, { name: cat });
+                    });
+                }
+                updateCategoriesUI();
+                console.log("Categories updated for group:", groupId);
+            }, (error) => {
+                console.error("Error fetching categories: ", error);
+            });
+        }
+
+        async function saveUsername() {
+            const newUsername = usernameInput.value.trim().toLowerCase();
+            if (!newUsername) {
+                showCustomModal('သတိပေးချက်', 'အုပ်စုအမည် (Nickname) ကို ထည့်သွင်းရန် လိုအပ်ပါသည်။', () => {}, null);
+                return;
+            }
+
+            try {
+                const groupDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'groups', newUsername);
+                const groupDoc = await getDoc(groupDocRef);
+
+                if (groupDoc.exists()) {
+                    await updateDoc(groupDocRef, {
+                        members: [...(groupDoc.data().members || []), userId]
+                    });
+                } else {
+                    await setDoc(groupDocRef, {
+                        owner: userId,
+                        members: [userId],
+                        createdAt: new Date().toISOString()
+                    });
+                }
+
+                groupId = newUsername;
+                username = newUsername;
+                localStorage.setItem('groupId', newUsername);
+                userIdDisplay.textContent = `အုပ်စု ID: ${groupId}`;
+                userNameDisplay.textContent = newUsername;
+                subscribeToData();
+                hideUsernameModal();
+                console.log("Username/Group saved successfully.");
+
+            } catch (error) {
+                console.error("Error saving username/group:", error);
+                showCustomModal('အမှား', 'အုပ်စုအမည်သိမ်း၍မရပါ။ ကျေးဇူးပြု၍ နောက်တစ်ကြိမ် ထပ်မံကြိုးစားပါ။', () => {}, null);
+            }
+        }
+
+        async function clearAllDataAndResetUser() {
+            showCustomModal(
+                'အချက်အလက်အားလုံးကို ဖျက်မည်လား',
+                'သင်၏အုပ်စုနှင့်ပတ်သက်သော မှတ်တမ်းများ၊ အမျိုးအစားများအားလုံး လုံးဝဖျက်ပစ်မည်။ ဤလုပ်ဆောင်ချက်ကို ပြန်လည်ပြင်၍မရပါ။',
+                async () => {
+                    try {
+                        if (!groupId) {
+                           showCustomModal('သတိပေးချက်', 'ဖျက်စရာ အုပ်စုအချက်အလက်မရှိပါ။', () => {}, null);
+                           return;
+                        }
+
+                        const categoriesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'categories');
+                        const transactionsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'transactions');
+                        const groupDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'groups', groupId);
+
+                        const categoryDocs = await getDocs(categoriesColRef);
+                        for (const d of categoryDocs.docs) { await deleteDoc(d.ref); }
+
+                        const transactionDocs = await getDocs(transactionsColRef);
+                        for (const d of transactionDocs.docs) { await deleteDoc(d.ref); }
+
+                        await deleteDoc(groupDocRef);
+
+                        groupId = null;
+                        username = 'ဧည့်သည်';
+                        localStorage.removeItem('groupId');
+                        userNameDisplay.textContent = username;
+                        userIdDisplay.textContent = 'အုပ်စု ID: ...';
+                        transactions = [];
+                        categories = [];
+                        updateAllUI();
+
+                        console.log("All group data successfully deleted.");
+                        hideUsernameModal();
+
+                    } catch (error) {
+                        console.error("Error clearing data:", error);
+                        showCustomModal('အမှား', 'အချက်အလက်များ ဖျက်၍မရပါ။ ကျေးဇူးပြု၍ နောက်တစ်ကြိမ် ထပ်မံကြိုးစားပါ။', () => {}, null);
+                    }
+                },
+                () => {
+                    hideUsernameModal();
+                }
+            );
+        }
+
+        function startApp() {
+            showScreen('dashboard-screen');
+            loadingOverlay.classList.add('hidden');
+            if (!groupId) {
+                showCustomModal('ကြိုဆိုပါတယ်', 'စတင်အသုံးပြုရန် အုပ်စုအမည်ကို သတ်မှတ်ပါ။', showUsernameModal);
+            }
+        }
+
+        function updateAllUI() {
+            updateTotalBalance();
+            renderRecentTransactions();
+            renderAllTransactions();
+            populateFilterMonths();
+            populateReportMonths();
+            updateReports();
+        }
+
+        function updateCategoriesUI() {
+            populateCategoriesDropdown();
+            renderCategoryList();
+        }
+
+        // Event Listeners
+        window.addEventListener('load', () => {
+            try {
+                const firebaseApp = initializeApp(firebaseConfigFromEnv);
+                db = getFirestore(firebaseApp);
+                auth = getAuth(firebaseApp);
+                setLogLevel('debug');
+
+            } catch (e) {
+                loadingText.textContent = "Firebase အစပျိုးရာတွင် အမှားအယွင်းရှိပါသည်။ console ကိုစစ်ဆေးပါ။";
+                console.error("Firebase initialization failed:", e);
+                return;
+            }
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    authReady = true;
+
+                    const storedGroupId = localStorage.getItem('groupId');
+                    if (storedGroupId) {
+                        const groupDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'groups', storedGroupId);
+                        const groupDoc = await getDoc(groupDocRef);
+                        if (groupDoc.exists()) {
+                            groupId = storedGroupId;
+                            username = storedGroupId;
+                            userIdDisplay.textContent = `အုပ်စု ID: ${groupId}`;
+                            userNameDisplay.textContent = username;
+                        } else {
+                            localStorage.removeItem('groupId');
+                        }
+                    }
+
+                    if (groupId) {
+                        subscribeToData();
+                    }
+                    startApp();
+
+                } else {
+                    try {
+                        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        loadingText.textContent = 'လော့ဂ်အင်ဝင်၍ မရပါ။ ကျေးဇူးပြု၍ console ကိုစစ်ဆေးပါ။';
+                        console.error("Firebase Auth failed:", error);
+                    }
+                }
+            });
+        });
+
+        transactionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            transactionSubmitBtn.disabled = true;
+
+            try {
+                if (!authReady || !groupId) {
+                    showCustomModal('သတိပေးချက်', 'မှတ်တမ်းမထည့်မီ အုပ်စုအမည်ကို အရင်သတ်မှတ်ပါ။', showUsernameModal, () => { showScreen('dashboard-screen') });
+                    return;
+                }
+                const type = transactionTypeEl.value;
+                const amount = parseFloat(transactionAmountEl.value);
+                const category = transactionCategoryEl.value;
+                const date = transactionDateEl.value;
+                const description = transactionDescriptionEl.value.trim();
+
+                if (isNaN(amount) || amount <= 0) {
+                    showCustomModal('အမှား', 'ပမာဏကို မှန်ကန်စွာ ထည့်သွင်းပါ။', () => {}, null);
+                    return;
+                }
+                if (!category) {
+                    showCustomModal('အမှား', 'အမျိုးအစားကို ရွေးချယ်ပါ။', () => {}, null);
+                    return;
+                }
+
+                const newTransaction = {
+                    type,
+                    amount,
+                    category,
+                    date,
+                    description,
+                    timestamp: new Date().toISOString(),
+                    username: username
+                };
+
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'transactions'), newTransaction);
+                transactionForm.reset();
+                showScreen('dashboard-screen');
+
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                showCustomModal('အမှား', 'မှတ်တမ်းတင်၍ မရပါ။ ကျေးဇူးပြု၍ ပြန်လည်စမ်းသပ်ပါ။', () => {}, null);
+            } finally {
+                transactionSubmitBtn.disabled = false;
+            }
+        });
+
+        addCategoryBtn.addEventListener('click', async () => {
+            const newCat = newCategoryInput.value.trim();
+            if (!authReady || !groupId) {
+                showCustomModal('သတိပေးချက်', 'အမျိုးအစားထည့်သွင်းရန် အုပ်စုအမည်ကို အရင်သတ်မှတ်ပါ။', showUsernameModal, () => {});
+                return;
+            }
+            if (newCat && !categories.includes(newCat)) {
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'groups', groupId, 'categories'), { name: newCat });
+                    newCategoryInput.value = '';
+                } catch (error) {
+                    console.error("Error adding category: ", error);
+                    showCustomModal('အမှား', 'အမျိုးအစား ထည့်၍ မရပါ။ ကျေးဇူးပြု၍ ပြန်လည်စမ်းသပ်ပါ။', () => {}, null);
+                }
+            } else if (categories.includes(newCat)) {
+                showCustomModal('အမှား', 'ဤအမျိုးအစား ရှိပြီးသားဖြစ်ပါသည်။', () => {}, null);
+            }
+        });
+
+        addCategoryBtnForm.addEventListener('click', () => {
+            showScreen('categories-screen');
+        });
+
         navButtons.forEach(button => {
             button.addEventListener('click', () => {
                 showScreen(button.dataset.screen);
             });
         });
 
-        // Event listeners for the new type selection buttons (Expense/Income)
-        expenseTypeBtn.addEventListener('click', () => selectTransactionType('expense'));
-        incomeTypeBtn.addEventListener('click', () => selectTransactionType('income'));
-
-        // Event listener for the new category selection button
-        categorySelectButton.addEventListener('click', () => {
-            showScreen('categories-screen');
-        });
-
-        // Event listener for the new date selection button to open native date picker
-        dateSelectButton.addEventListener('click', () => {
-            hiddenTransactionDateInput.showPicker();
-        });
-
-        // Event listener for when the hidden date input's value changes
-        hiddenTransactionDateInput.addEventListener('change', () => {
-            selectedDateText.textContent = formatDisplayDate(hiddenTransactionDateInput.value);
-        });
-
-        // Filter transactions when month or category filter changes
         filterMonthEl.addEventListener('change', renderAllTransactions);
         filterCategoryEl.addEventListener('change', renderAllTransactions);
-
-        // Update reports when report month selection changes
         reportMonthSelectEl.addEventListener('change', updateReports);
 
-        // Initial setup when the page loads
-        window.onload = function() {
-            // Firebase authentication listener will handle calling setupFirestoreListeners
-            // This ensures Firebase is initialized and user is authenticated before data operations
-            showScreen('dashboard-screen'); // Show dashboard as the default screen on load
-            displayUserId(); // Initial display, will be updated once auth is ready
-        };
+        editUserBtn.addEventListener('click', () => {
+            showUsernameModal();
+            const currentName = userNameDisplay.textContent;
+            usernameInput.value = currentName === 'ဧည့်သည်' ? '' : currentName;
+        });
+
+        saveUsernameBtn.addEventListener('click', saveUsername);
+        cancelUsernameBtn.addEventListener('click', hideUsernameModal);
+        clearUsernameBtn.addEventListener('click', clearAllDataAndResetUser);
+
+        document.getElementById('username-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                saveUsername();
+            }
+        });
     </script>
 </body>
 </html>
-
