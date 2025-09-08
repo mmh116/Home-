@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MMHအိမ်သုံးစရိတ်</title>
-    
+<audio id="background-music" src="MMHK/MMH.mp3" loop></audio>
+
+<button id="play-music-btn" class="fixed bottom-24 right-4 z-50 p-3 bg-gray-800 text-white rounded-full shadow-lg">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.923a.75.75 0 01-.142 1.06l-3.114 3.115a.75.75 0 01-1.06 0L10.057 7.06a.75.75 0 01.142-1.06L13.171 2.89a.75.75 0 011.06 0l3.114 3.114zM12.924 15.077a.75.75 0 01-.142 1.06l-3.114 3.114a.75.75 0 01-1.06 0L5.057 16.06a.75.75 0 01.142-1.06l3.114-3.114a.75.75 0 011.06 0l3.114 3.114zM12 12a1 1 0 110-2 1 1 0 010 2zM6 12a1 1 0 110-2 1 1 0 010 2zM18 12a1 1 0 110-2 1 1 0 010 2z" />
+    </svg>
+</button>
+
+
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -63,7 +71,7 @@
             width: 100%;
         }
         #balance-card {
-    background-color: #ffffff; /* နောက်ခံကို မည်းနက်ရောင်ပြောင်းလိုက်ပါတယ် */
+    background-color: #1a237e; /* နောက်ခံကို မည်းနက်ရောင်ပြောင်းလိုက်ပါတယ် */
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -77,6 +85,15 @@
     letter-spacing: -1px;
     color: #008000; 
 }
+/* ဒီ code အသစ်ကို အစားထိုးထည့်သွင်းပါ */
+#total-balance.glitter-active {
+    animation: none; /* အရင်က animation ကို ပယ်ဖျက်လိုက်ပါ */
+}
+
+#total-balance span.glitter-active {
+    animation: glitter 0.7s infinite ease-in-out;
+}
+
         .screen {
             display: none;
             flex-grow: 1;
@@ -217,6 +234,56 @@
     /* ... လက်ရှိ code များ ... */
      background: linear-gradient(45deg, #FF6B6B, #F6F479, #93C6E7, #A0D8B3);
 }
+ @keyframes glitter {
+    0% { color: #ff0000; text-shadow: 0 0 5px #ff0000, 0 0 10px #ff5500; }  /* အနီရောင် */
+    16% { color: #ff5500; text-shadow: 0 0 5px #ff5500, 0 0 10px #ffaa00; }  /* လိမ္မော်ရောင် */
+    33% { color: #ffff00; text-shadow: 0 0 5px #ffff00, 0 0 10px #aaff00; }  /* အဝါရောင် */
+    50% { color: #00ff00; text-shadow: 0 0 5px #00ff00, 0 0 10px #00ffaa; }  /* အစိမ်းရောင် */
+    66% { color: #00aaff; text-shadow: 0 0 5px #00aaff, 0 0 10px #0055ff; }  /* အပြာရောင် */
+    83% { color: #0000ff; text-shadow: 0 0 5px #0000ff, 0 0 10px #aa00ff; }  /* အပြာနုရောင် */
+    100% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff0055; } /* ခရမ်းရောင် */
+}
+
+
+        #total-balance.glitter-active {
+            animation: glitter 1.5s infinite ease-in-out;
+        }
+
+        /* Balance card style adjust */
+        #balance-card {
+            background-color: #000000;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        #total-balance {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 0px;
+            letter-spacing: -1px;
+            /* Default color, will be overridden by glitter effect */
+        }
+        #balance-card {
+    /* Existing styles */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    
+    /* New: Kanoke Pattern */
+    background-image: url('https://img.pikbest.com/origin/06/31/01/20rpIkbEsTgBk.png!sw800');
+    background-repeat: no-repeat;
+    background-size: 120% 230%; /* Puts the image inside the border */
+    background-position: center;
+    background-blend-mode: multiply; /* Make the pattern darker */
+    
+    /* Add a small padding to make the border visible */
+    padding: 22px; 
+}
+
     </style>
 </head>
 <body>
@@ -597,7 +664,7 @@
             selectedDateValue.textContent = dateText;
         }
 
-        function updateTotalBalance() {
+                                function updateTotalBalance() {
             let totalIncome = 0;
             let totalExpense = 0;
 
@@ -610,16 +677,32 @@
             });
 
             const balance = totalIncome - totalExpense;
-            totalBalanceEl.textContent = formatCurrency(balance);
-            totalBalanceEl.classList.remove('text-green-600', 'text-red-600', 'text-gray-900');
-            if (balance > 0) {
-                totalBalanceEl.classList.add('text-green-600');
-            } else if (balance < 0) {
-                totalBalanceEl.classList.add('text-red-600');
-            } else {
-                totalBalanceEl.classList.add('text-gray-900');
+            const formattedBalance = formatCurrency(balance);
+
+            // လက်ရှိ HTML ကို ရှင်းလင်းလိုက်ပါ
+            totalBalanceEl.innerHTML = '';
+            
+            // ဂဏန်းတလုံးချင်းစီကို စစ်ဆေးပြီး သီးခြား animation ပေးပါ
+            for (let i = 0; i < formattedBalance.length; i++) {
+                const char = formattedBalance[i];
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.style.animationDelay = `${i * 0.1}s`; // တစ်လုံးချင်းစီအတွက် animation delay ပေးပါ
+
+                // အရောင်နဲ့ glitter effect ထည့်သွင်းပါ
+                if (balance > 0) {
+                    span.classList.add('glitter-active', 'text-green-600');
+                } else if (balance < 0) {
+                    span.classList.add('text-red-600');
+                } else {
+                    span.classList.add('text-gray-900');
+                }
+
+                totalBalanceEl.appendChild(span);
             }
         }
+
+
 
         // New function to update the daily summary
         function updateDailySummary() {
@@ -1371,6 +1454,22 @@
                 saveUsername();
             }
         });
+                const music = document.getElementById('background-music');
+        const playMusicBtn = document.getElementById('play-music-btn');
+
+        let isPlaying = false;
+        playMusicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                music.pause();
+                isPlaying = false;
+                playMusicBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9m7.5-3v12m-9-12v12m-3-6h2.25M3.75 12h7.5M10.5 12a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zM18 12a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" /></svg>';
+            } else {
+                music.play();
+                isPlaying = true;
+                playMusicBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.923a.75.75 0 01-.142 1.06l-3.114 3.115a.75.75 0 01-1.06 0L10.057 7.06a.75.75 0 01.142-1.06L13.171 2.89a.75.75 0 011.06 0l3.114 3.114zM12.924 15.077a.75.75 0 01-.142 1.06l-3.114 3.114a.75.75 0 01-1.06 0L5.057 16.06a.75.75 0 01.142-1.06l3.114-3.114a.75.75 0 011.06 0l3.114 3.114zM12 12a1 1 0 110-2 1 1 0 010 2zM6 12a1 1 0 110-2 1 1 0 010 2zM18 12a1 1 0 110-2 1 1 0 010 2z" /></svg>';
+            }
+        });
+
     </script>
 </body>
 </html>
